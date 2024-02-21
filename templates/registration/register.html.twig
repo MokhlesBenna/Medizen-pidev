@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				{{ form_start(registrationForm,{ attr: {novalidate: 'novalidate' , 'class':'login100-form validate-form'} }) }}
+
+
+				<span class="login100-form-title p-b-49">
+					Nouveau Compte
+				</span>
+
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">{{ form_label(registrationForm.username, 'Username') }}</span>
+
+					{{ form_widget(registrationForm.username, { 
+        'attr': {'class': 'input100'},
+        'label_attr': {'class': 'input100'}
+    }) }}
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+
+					{% if form_errors(registrationForm.username) is not empty %}
+						{% for error in form_errors(registrationForm.username) %}
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+				</div>
+
+
+				<div class="wrap-input100 validate-input m-b-23">
+
+					<span class="label-input100">{{ form_label(registrationForm.lastname) }}</span>
+
+
+					{{ form_widget(registrationForm.lastname,{ attr: {'class':'input100'}}, 'Type your lastname') }}
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+					{% if form_errors(registrationForm.lastname) is not empty  %}
+
+
+						{% for error in registrationForm.lastname.vars['errors'] %}
+
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">{{ form_label(registrationForm.dateDeNaissance) }}</span>
+
+
+					{{ form_widget(registrationForm.dateDeNaissance,{ attr: {'class':'input100'}}) }}
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+					{% if form_errors(registrationForm.dateDeNaissance) is not empty  %}
+
+						{% for error in registrationForm.dateDeNaissance.vars['errors'] %}
+
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+
+				</div>
+
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">Genre</span>
+					<div class="gender-icons">
+						<div class="gender-icon">
+							{{ form_widget(registrationForm.genre,{ attr: {'class':'radio'}}) }}
+							
+
+						</div>
+					</div>
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-23">
+
+					<span class="label-input100">{{ form_label(registrationForm.telephone) }}</span>
+
+
+					{{ form_widget(registrationForm.telephone,{ attr: {'class':'input100'}}) }}
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+					{% if form_errors(registrationForm.telephone) is not empty  %}
+
+
+						{% for error in registrationForm.telephone.vars['errors'] %}
+
+
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">{{ form_label(registrationForm.email) }}</span>
+
+
+					{{ form_widget(registrationForm.email,{ attr: {'class':'input100'}}) }}
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+					{% if form_errors(registrationForm.email) is not empty  %}
+
+						{% for error in registrationForm.email.vars['errors'] %}
+
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">Rôle</span>
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-23">
+					<span class="label-input100">{{ form_label(registrationForm.password) }}</span>
+
+
+					{{ form_row(registrationForm.password, {
+
+                            label: 'Password'
+                        }) }}
+
+
+					<span class="focus-input100" data-symbol="&#xf206;"></span>
+					{% if form_errors(registrationForm.password) is not empty  %}
+
+
+						{% for error in registrationForm.password.vars['errors'] %}
+
+
+							<span class="text-danger">{{ error.message }}</span>
+						{% endfor %}
+					{% endif %}
+
+				</div>
+
+
+				<div class="container-contact100-form-btn">
+					<div class="wrap-contact100-form-btn">
+						<div class="contact100-form-bgbtn"></div>
+						<button class="contact100-form-btn" type="submit">
+							<span>
+								Envoyer
+								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+							</span>
+						</button>
+					</div>
+				</div>
+				{{ form_end(registrationForm) }}
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
