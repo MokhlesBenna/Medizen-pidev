@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EtablissementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtablissementRepository::class)]
@@ -24,6 +26,14 @@ class Etablissement
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\OneToMany(targetEntity: Departement::class, mappedBy: 'etablissement')]
+    private Collection $departementList;
+
+    public function __construct()
+    {
+        $this->departementList = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +84,36 @@ class Etablissement
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Departement>
+     */
+    public function getDepartementList(): Collection
+    {
+        return $this->departementList;
+    }
+
+    public function addDepartementList(Departement $departementList): static
+    {
+        if (!$this->departementList->contains($departementList)) {
+            $this->departementList->add($departementList);
+            $departementList->setEtablissement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepartementList(Departement $departementList): static
+    {
+        if ($this->departementList->removeElement($departementList)) {
+            // set the owning side to null (unless already changed)
+            if ($departementList->getEtablissement() === $this) {
+                $departementList->setEtablissement(null);
+            }
+        }
 
         return $this;
     }
