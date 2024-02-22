@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DepartementRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DepartementRepository::class)]
 class Departement
@@ -13,19 +14,38 @@ class Departement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire')]
+    #[Assert\Regex(
+        pattern: '/^[a-z]+$/i',
+        message: 'lEtablissement ne contient pas des nombre',
+        match: true
+    )]
     private ?string $Nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+    #[Assert\Length(
+        min: 50,
+        max: 255,
+        minMessage: 'insuffisant {{ limit }}',
+        maxMessage: 'trop long {{ limit }} ',
+    )]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+
     private ?string $chefDepartement = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+
     private ?string $servicesOfferts = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+
     private ?string $localisation = null;
 
     #[ORM\ManyToOne(inversedBy: 'departementList')]
@@ -106,5 +126,8 @@ class Departement
         $this->etablissement = $etablissement;
 
         return $this;
+    }
+    public function __toString(){
+        return $this->Nom;
     }
 }

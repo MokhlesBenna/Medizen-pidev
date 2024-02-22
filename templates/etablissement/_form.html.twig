@@ -1,0 +1,90 @@
+  
+{{ form_start(form,{attr: {'novalidate': 'novalidate'}}) }}
+    
+        <div class="row g-3">
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.name) }}      
+                    </p>        
+                    {{ form_widget(form.name ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.name) is not empty  %}
+                        {% for error in form.name.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.type) }}      
+                    </p>        
+                    {{ form_widget(form.type ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.type) is not empty  %}
+                        {% for error in form.type.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.location) }}      
+                    </p>        
+                    {{ form_widget(form.location ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.location) is not empty  %}
+                        {% for error in form.location.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.description) }}      
+                    </p>        
+                    {{ form_widget(form.description ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.description) is not empty  %}
+                        {% for error in form.description.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            
+
+
+                
+                            
+            <div class="col-10 col-sm-4">            
+                <button class="btn btn-primary w-100 py-3">{{ button_label|default('Save') }}</button>   
+            </div> 
+        </div>
+    </div>
+
+        
+    
+    
+
+{{ form_end(form) }}
+                
+
+
+
+
+
+

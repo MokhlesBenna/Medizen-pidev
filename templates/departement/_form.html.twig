@@ -1,0 +1,92 @@
+
+              
+{{ form_start(form,{attr: {'novalidate': 'novalidate'}}) }}
+    
+        <div class="row g-3">
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.Nom) }}      
+                    </p>        
+                    {{ form_widget(form.Nom ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.Nom) is not empty  %}
+                        {% for error in form.Nom.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.description) }}      
+                    </p>        
+                    {{ form_widget(form.description ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.description) is not empty  %}
+                        {% for error in form.description.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.chefDepartement) }}      
+                    </p>        
+                    {{ form_widget(form.chefDepartement ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.chefDepartement) is not empty  %}
+                        {% for error in form.chefDepartement.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.localisation) }}      
+                    </p>        
+                    {{ form_widget(form.localisation ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.localisation) is not empty  %}
+                        {% for error in form.localisation.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+             <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.servicesOfferts) }}      
+                    </p>        
+                    {{ form_widget(form.servicesOfferts ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.servicesOfferts) is not empty  %}
+                        {% for error in form.servicesOfferts.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+                
+                
+                            
+            <div class="col-10 col-sm-4">            
+                <button class="btn btn-primary w-100 py-3">{{ button_label|default('Save') }}</button>   
+            </div> 
+        </div>
+        
+
+{{ form_end(form) }}
+

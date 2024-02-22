@@ -6,6 +6,8 @@ use App\Repository\EtablissementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: EtablissementRepository::class)]
 class Etablissement
@@ -16,15 +18,33 @@ class Etablissement
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire')]
+    #[Assert\Regex(
+        pattern: '/^[a-z]+$/i',
+        message: 'lEtablissement ne contient pas des nombre',
+        match: true
+    )]
     private ?string $name = null;
+    
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+
     private ?string $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+
     private ?string $location = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank (message:'champ obligatoire') ]
+    #[Assert\Length(
+        min: 50,
+        max: 255,
+        minMessage: 'insuffisant {{ limit }}',
+        maxMessage: 'trop long {{ limit }} ',
+    )]
     private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: Departement::class, mappedBy: 'etablissement')]
@@ -116,5 +136,9 @@ class Etablissement
         }
 
         return $this;
+    }
+
+    public function __toString(){
+        return $this->name;
     }
 }
