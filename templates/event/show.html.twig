@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<!-- Service Start -->
+	<div class="container-xxl py-5">
+		<div class="container">
+
+
+			<div class="container-xxl py-5">
+				<div class="container">
+					<div class="row g-4">
+						<div
+							class="col-lg-6 pe-lg-0 wow fadeIn" data-wow-delay="0.5s" style="min-height: 400px;"><!-- Placeholder for an image or other content in the left column -->
+						</div>
+						<div class="col-md-6 col-lg-6 mb-6">
+							<div class="card h-100 service-item shadow-sm">
+								<div class="card-body">
+									<h2 class="card-title">{{ event.titre }}</h2>
+									<p class="card-text">{{ event.description }}</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<p class="card-text">Date:
+											{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</p>
+										<br>
+										<p class="card-text">Lieu:{{ event.lieu }}</p>
+										<br>
+									</div>
+									<br>
+									<a href="{{ path('event_details', {'id': event.id}) }}" class="btn btn-primary">Get it now</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		{% endblock %}

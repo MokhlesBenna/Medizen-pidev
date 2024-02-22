@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+{% block navbar %}
+	<!-- Navbar Start -->
+	<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+		<a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+			<h1 class="m-0 text-primary">
+				<i class="far fa-hospital me-3"></i>MediZen</h1>
+		</a>
+		<button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<div class="navbar-nav ms-auto p-4 p-lg-0">
+				<a href="index.html" class="nav-item nav-link active">Accueil</a>
+				<a href="about.html.twig" class="nav-item nav-link">A propos</a>
+				<a href="service.html" class="nav-item nav-link">Service</a>
+				<div class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+					<div class="dropdown-menu rounded-0 rounded-bottom m-0">
+						<a href="feature.html" class="dropdown-item">Feature</a>
+						<a href="team.html" class="dropdown-item">Our Doctor</a>
+						<a href="appointment.html" class="dropdown-item">se connecter</a>
+						<a href="testimonial.html" class="dropdown-item">Testimonial</a>
+						<a href="404.html" class="dropdown-item">404 Page</a>
+					</div>
+				</div>
+				<a href="contact.html" class="nav-item nav-link">Contact</a>
+			</div>
+			<a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">se connecter<i class="fa fa-arrow-right ms-3"></i>
+			</a>
+		</div>
+	</nav>
+{% endblock %}
+
+{% block body %}
+
+
+	{% block form %}
+		<div class="container-fluid">
+			<div class="header bg-primary p-0 mb-5">
+				<div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+					<div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s">
+						<h1 class="display-4 text-white mb-5">Explorez Nos Événements Santé : Engagez-vous dans une Vie Intelligente</h1>
+						<div class="row g-4">
+							<div class="col-sm-4">
+								<div class="border-start border-light ps-4">
+									<h2 class="text-white mb-1" data-toggle="counter-up">123</h2>
+									<p class="text-light mb-0">Expert Doctors</p>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="border-start border-light ps-4">
+									<h2 class="text-white mb-1" data-toggle="counter-up">1234</h2>
+									<p class="text-light mb-0">Medical Staff</p>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="border-start border-light ps-4">
+									<h2 class="text-white mb-1" data-toggle="counter-up">12345</h2>
+									<p class="text-light mb-0">Total Patients</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="col-lg-10 text-center">
+			<h2>Connectez-vous à la Santé Intelligente : Inscrivez-vous Dès Aujourd'hui</h2>
+		</div>
+
+		<div class="container">
+			<div class="row justify-content-center align-items-center min-vh-85">
+				<div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+					<div class="bg-light rounded h-100 d-flex align-items-center p-5">
+						<form method="post" action="{{ path('app_participant_new') }}">
+							<h2>Formulaire de participation</h2>
+
+							{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+							<label for="inputText" class="col-sm-4 col-form-label">nom</label>
+							<div class="col-sm-15">
+
+								{{ form_widget(form.nom,{'attr':{'class':'form-control'}}) }}
+
+							</div>
+							{{ form_errors(form.nom,{'attr':{'class':'text-danger'}}) }}
+
+
+							<label for="inputText" class="col-sm-4 col-form-label">prenom</label>
+							<div class="col-sm-15">
+								{{ form_widget(form.prenom,{'attr':{'class':'form-control'}}) }}
+
+							</div>
+							{{ form_errors(form.prenom,{'attr':{'class':'text-danger'}}) }}
+
+							<label for="inputText" class="col-sm-4 col-form-label">email</label>
+							<div class="col-sm-15">
+								{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'nom.prenom@gmail.com'}}) }}
+
+							</div>
+							{{ form_errors(form.email,{'attr':{'class':'text-danger'}}) }}
+
+							<label for="inputText" class="col-sm-4 col-form-label">numero</label>
+							<div class="col-sm-10">
+								{{ form_widget(form.numero,{'attr':{'class':'form-control'}}) }}
+
+							</div>
+							{{ form_errors(form.numero,{'attr':{'class':'text-danger'}}) }}
+
+							<br/>
+							<div class="col-sm-10" style="display: flex;align-items: center;justify-content: center">
+
+								{{ form_widget(form.ajouter,{'attr':{'class':'btn btn-primary'}}) }}
+							</div>
+
+							{{ form_end(form) }}
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+{% endblock %}

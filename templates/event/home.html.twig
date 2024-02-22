@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+	<!-- About Start -->
+	<div class="container-xxl py-5">
+		<div class="container">
+			<div class="row g-5">
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+					<div class="d-flex flex-column">
+						<img class="img-fluid rounded w-75 align-self-end" src="{{ asset('img/about-1.jpg') }}" alt="">
+						<img class="img-fluid rounded w-50 bg-white pt-3 pe-3" src="{{ asset('img/about-2.jpg') }}" alt="" style="margin-top: -25%;">
+					</div>
+				</div>
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+					<p class="d-inline-block border rounded-pill py-1 px-4">About Us</p>
+					<h1 class="mb-4">Inscrivez-vous à Nos Événements Smart Health pour un Mieux-Être</h1>
+					<p>Chez MediZen, nous sommes dévoués à promouvoir votre bien-être et à vous offrir des ressources précieuses pour une vie plus saine. Nos événements de santé sont conçus pour vous informer, vous inspirer et vous guider sur le chemin du mieux-être.
+																																																																																																																																																												
+																																																																																																																																																												En vous inscrivant à nos événements, vous aurez l'opportunité unique de participer à des conférences informatives, des ateliers interactifs et des séances pratiques dirigées par des experts de la santé. Ces événements abordent une variété de sujets, allant de la gestion du stress à la promotion d'une alimentation équilibrée et à la compréhension des dernières avancées en matière de santé.
+																																																																																																																																																												
+																																																																																																																																																												Pourquoi devriez-vous vous inscrire ?
+
+
+					</p>
+					<p class="mb-4">C'est simple ! Explorez nos  d'événements ci-dessous, choisissez ceux qui vous intéressent et inscrivez-vous en quelques clics. Nous avons hâte de vous accueillir et de vous accompagner dans votre parcours vers une vie plus saine..</p>
+
+					<a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="{{path('app_event_indexx')}}">S'inscrire</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- About End -->
+</body>{% endblock %}

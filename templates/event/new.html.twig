@@ -1,0 +1,60 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}New Evenevement
+{% endblock %}
+
+{% block body %}
+
+	<div class="row">
+		<div style="display: flex;align-items: center;justify-content: center;margin-top: 90px; padding: 18px;">
+
+			<div class="card col-md-7">
+				<div class="card-body">
+					<h5 class="card-title">Ajouter un Evenement</h5>
+
+					<!-- General Form Elements -->
+					<form method="post" id="event_form" novalidate>
+						{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+						<div class="mb-3">
+							<label for="Titre" class="col-form-label">Titre</label>
+							{{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.titre, {'attr': {'class': 'text-danger'}}) }}
+						</div>
+
+
+						<div class="mb-3">
+							<label for="dateDebut" class="col-form-label">Date de Début</label>
+							{{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.dateDebut, {'attr': {'class': 'text-danger'}}) }}
+							<div id="date_debut_error" class="text-danger" style="display: none;">Date passée</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="dateFin" class="col-form-label">Date de Fin</label>
+							{{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.dateFin, {'attr': {'class': 'text-danger'}}) }}
+							<div id="date_fin_error" class="text-danger" style="display: none;">Date passée</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="Contenu" class="col-form-label">Lieu</label>
+							{{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.lieu, {'attr': {'class': 'text-danger'}}) }}
+						</div>
+						<div class="mb-3">
+							<label for="Contenu" class="col-form-label">Description</label>
+							{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+							{{ form_errors(form.description, {'attr': {'class': 'text-danger'}}) }}
+						</div>
+
+						<button type="submit" class="btn btn-primary">Enregistrer</button>
+						<a href="{{ path('app_event_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+						{{ form_end(form) }}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

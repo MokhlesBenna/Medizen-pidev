@@ -1,0 +1,33 @@
+{# event/showadmin.html.twig #}
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+	<h1>Event Details (Admin)</h1>
+
+	<table class="table table-borderless datatable">
+		<thead>
+			<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Titre</th>
+				<th scope="col">DateDebut</th>
+				<th scope="col">DateFin</th>
+				<th scope="col">Lieu</th>
+				<th scope="col">Description</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr>
+				<td>{{ event.id }}</td>
+				<td>{{ event.titre }}</td>
+				<td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+				<td>{{ event.dateFin ? event.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+				<td>{{ event.lieu }}</td>
+				<td>{{ event.description }}</td>
+
+			</tr>
+
+		</tbody>
+	</table>
+</div>{% endblock %}

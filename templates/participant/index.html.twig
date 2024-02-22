@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participant index
+{% endblock %}
+
+{% block body %}{% endblock %}
+{% block about %}
+	<!-- About Start -->
+	<div class="container-xxl py-5">
+
+		<div class="container">
+			<div class="row g-5">
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+					<div class="d-flex flex-column">
+						<img class="img-fluid rounded w-75 align-self-end" src="{{ asset('img/about-1.jpg') }}" alt="">
+						<img class="img-fluid rounded w-50 bg-white pt-3 pe-3" src="{{ asset('img/about-2.jpg') }}" alt="" style="margin-top: -25%;">
+					</div>
+				</div>
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+					<p class="d-inline-block border rounded-pill py-1 px-4">About Us</p>
+					<h1 class="mb-4">Explorez Nos Événements Santé : Engagez-vous dans une Vie Intelligente</h1>
+					<p>Chez MediZen, nous sommes dévoués à promouvoir votre bien-être et à vous offrir des ressources précieuses pour une vie plus saine. Nos événements de santé sont conçus pour vous informer, vous inspirer et vous guider sur le chemin du mieux-être.t</p>
+					<p class="mb-4">En vous inscrivant à nos événements, vous aurez l'opportunité unique de participer à des conférences informatives, des ateliers interactifs et des séances pratiques dirigées par des experts de la santé.</p>
+					<p>
+						<i class="far fa-check-circle text-primary me-3"></i>Opportunité d'interagir avec des experts et de poser des questions spécifiques à votre situation.
+					</p>
+					<p>
+						<i class="far fa-check-circle text-primary me-3"></i>Connexion avec d'autres membres de la communauté partageant les mêmes préoccupations de santé.
+					</p>
+					<p>
+						<i class="far fa-check-circle text-primary me-3"></i>Rejoignez-nous pour inspirer le changement et prendre le contrôle de votre santé dès aujourd'hui !</p>
+					<a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href=" {{ path('app_participant_new') }} ">S'inscrire</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- About End -->
+{% endblock %}
