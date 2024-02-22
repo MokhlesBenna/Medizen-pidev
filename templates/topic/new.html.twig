@@ -1,0 +1,47 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}New Topic{% endblock %}
+
+{% block body %}
+    <h3>Créez la Discussion :</h3>
+    <h3> Partagez Votre Voix avec la Communauté!</h3>
+    <div class="row">
+        <div style="display: flex;align-items: center;justify-content: center;margin-top: 90px; padding: 18px;">
+
+            <div class="card col-md-7">
+                <div class="card-body">
+                    <h5 class="card-title">Ajouter un sujet</h5>
+
+                    <!-- General Form Elements -->
+                    <form method="post" id="topic_form" novalidate>
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        <div class="mb-3">
+                            <label for="Titre" class="col-form-label">Titre</label>
+                            {{ form_widget(form.Titre, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.Titre, {'attr': {'class': 'text-danger'}}) }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Contenu" class="col-form-label">Contenu</label>
+                            {{ form_widget(form.Contenu, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.Contenu, {'attr': {'class': 'text-danger'}}) }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Datedecreation" class="col-form-label">Date de création</label>
+                            {{ form_widget(form.Datedecreation, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.Datedecreation, {'attr': {'class': 'text-danger'}}) }}
+                            <div id="date_error" class="text-danger" style="display: none;">Date passée</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a href="{{ path('app_topic_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+                        {{ form_end(form) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
