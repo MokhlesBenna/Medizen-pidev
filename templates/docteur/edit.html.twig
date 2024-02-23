@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="display-4 text-center mb-5">Modifier le docteur</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form action="{{ path('app_docteur_edit', {'id': docteur.id}) }}" method="post">
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.nom) }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.prenom) }}
+                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.mail) }}
+                    {{ form_widget(form.mail, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.experience) }}
+                    {{ form_widget(form.experience, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.mobile) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.addresse) }}
+                    {{ form_widget(form.addresse, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary btn-block">Enregistrer les modifications</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

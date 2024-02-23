@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Doctor{% endblock %}
+
+{% block body %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="mb-4">
+                        <h1 class="fw-bold">Ajouter rapidement un médecin à votre établissement</h1>
+                        <p class="lead">Remplissez le formulaire ci-joint pour ajouter un nouveau médecin.</p>
+                    </div>
+                    <div class="bg-light rounded d-flex align-items-center p-4 mb-4">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 55px; height: 55px;">
+                            <i class="fa fa-user-md"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-2">Pour toute réclamation, appelez-nous maintenant</p>
+                            <h5 class="mb-0">+216 12 345 678</h5>
+                        </div>
+                    </div>
+                    <div class="bg-light rounded d-flex align-items-center p-4">
+                        <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 55px; height: 55px;">
+                            <i class="fa fa-envelope-open"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-2">Pour tout type envoyez-nous un e-mail maintenant</p>
+                            <h5 class="mb-0">medizen@gmail.com</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                    {{ form_start(form) }}
+                    <div class="bg-light rounded p-5 mb-4">
+                        <div class="mb-3">
+                            {{ form_row(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.mail, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.experience, {'attr': {'class': 'form-control', 'placeholder': 'Expérience'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.mobile, {'attr': {'class': 'form-control', 'placeholder': 'Mobile'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.addresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+                        </div>
+                    </div>
+                    <div class="text-center"> 
+                        <button type="submit" class="btn btn-primary">Ajouter Médecin</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>  
+    </div>
+{% endblock %}

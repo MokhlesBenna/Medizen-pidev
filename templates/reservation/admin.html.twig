@@ -1,0 +1,50 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <h1>Liste des Réservations pour vous</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prénom</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Date de Réservation</th>
+                <th scope="col" class="text-middle">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                {% if reservation.status == "pending" %}
+                    <tr>
+                        <td>{{ reservation.name }}</td>
+                        <td>{{ reservation.surname }}</td>
+                        <td>{{ reservation.mobile }}</td>
+                        <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
+                        <td class="text-center align-middle">
+                            <div class="d-inline-block mx-2">
+                                <form action="{{ path('reject_reservation', {'id': reservation.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir rejeter cette réservation?');">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">Rejeter la Réservation</button>
+                                </form>
+                            </div>
+                            <div class="d-inline-block mx-2">
+                                <form action="{{ path('accept_reservation', {'id': reservation.id}) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ reservation.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-primary">Confirmer la Réservation</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% if reservations is empty %}
+                <tr>
+                    <td colspan="5">Aucune réservation en attente</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
