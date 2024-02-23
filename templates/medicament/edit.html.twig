@@ -1,0 +1,14 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Edit Medicament{% endblock %}
+
+{% block body %}
+    <h1>Edit Medicament</h1>
+
+    {{ include('medicament/_form.html.twig', {'button_label': 'Update'}) }}
+
+         <a class="btn btn-primary" href="{{ path('app_medicament_all') }}"><i class="fa fa-plus me-2"></i>back to list</a>
+
+       
+ 
+{% endblock %}

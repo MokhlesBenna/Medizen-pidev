@@ -1,0 +1,46 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-dark mb-4 wow fadeInDown">Détails de la Commande</h1>
+
+        <table class="table table-bordered wow fadeInUp" data-wow-delay="0.5s">
+            <tbody>
+                <tr>
+                    <th scope="row">ID</th>
+                    <td>{{ commande.id }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Total Price</th>
+                    <td>{{ commande.totalprice }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Quantity Ordered</th>
+                    <td>{{ commande.quantityOrdered }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Date Ordered</th>
+                    <td>{{ commande.dateOrdered ? commande.dateOrdered|date('Y-m-d') : 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>{{ commande.status }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="{{ path('app_commande_index') }}" class="btn btn-primary"><i class="fa fa-arrow-left me-2"></i>Retour à la liste</a>
+
+        <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" class="btn btn-warning"><i class="fa fa-edit me-2"></i>Modifier</a>
+
+        {{ include('commande/_delete_form.html.twig') }}
+    </div>
+
+    <!-- Add the following CSS for the wow animations -->
+    <style>
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+    </style>
+
+{% endblock %}

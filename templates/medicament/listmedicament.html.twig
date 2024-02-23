@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+  <div class="row g-4">
+{% for medicament in medicaments %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 service-item shadow-sm">
+            <img src="{{ asset(medicament.image) }}" alt="{{ medicament.name }}" class="card-img-top img-fluid">
+            <div class="card-body p-4">
+                <h4 class="card-title text-center">{{ medicament.name }}</h4>
+                <p class="card-text">{{ medicament.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a class="btn btn-primary" href="{{ path('medicament_details', {'id': medicament.id}) }}"><i class="fa fa-plus me-2"></i>Read More</a>
+
+                    <span class="text-muted">{{ medicament.price }} €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock  %}

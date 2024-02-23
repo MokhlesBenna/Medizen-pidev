@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirm Commande{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-dark mb-4 wow fadeInDown">Confirm Commande</h1>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                {% for flash_message in app.flashes('danger') %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ flash_message }}
+                    </div>
+                {% endfor %}
+
+                <div class="card">
+                    <div class="card-header">
+                        Commande Details
+                    </div>
+                    {% for medicament in commande.getMedicamentList() %}
+                    <img src="{{ asset(medicament.image) }}" class="card-img-top" alt="{{ medicament.name }}" style="width: 150px; height: auto;">
+
+ {% endfor %}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Commande ID:</strong> {{ commande.getId() }}</li>
+                        <li class="list-group-item"><strong>Total Price:</strong> {{ commande.getTotalprice() }} €</li>
+                        <li class="list-group-item"><strong>Quantity Ordered:</strong> {{ commande.getQuantityOrdered() }}</li>
+                        <li class="list-group-item"><strong>Date Ordered:</strong> {{ commande.getDateOrdered() ? commande.getDateOrdered().format('Y-m-d') : 'N/A' }}</li>
+                        <li class="list-group-item"><strong>Status:</strong> {{ commande.getStatus() }}</li>
+                    </ul>
+                </div>
+
+                <p class="text-muted mt-3 wow fadeIn" data-wow-delay="0.7s">Medicaments in the command:</p>
+
+                {% if commande.getMedicamentList()|length > 0 %}
+                    <ul class="list-group">
+                        {% for medicament in commande.getMedicamentList() %}
+              
+                            <li class="list-group-item">{{ medicament.getName() }} </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted wow fadeIn" data-wow-delay="0.7s">No medicaments in the command.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ path('app_medicament_index') }}" class="btn btn-primary btn-lg wow fadeInLeft" data-wow-delay="0.3s">Back to store</a>
+                <a href="{{ path('app_medicament_index') }}" class="btn btn-success btn-lg wow fadeInRight" data-wow-delay="0.3s">Confirm Commande</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add the following CSS for the wow animations and custom styles -->
+    <style>
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+
+        /* Add your custom styles here */
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}

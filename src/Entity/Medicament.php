@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\MedicamentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: MedicamentRepository::class)]
+#[Vich\Uploadable]
 class Medicament
 {
     #[ORM\Id]
@@ -14,19 +18,37 @@ class Medicament
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Please provide a name for the medication.')]
+    #[Assert\Length(max: 255, maxMessage: 'Name cannot be longer than 10 characters.')]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Please specify the quantity of the medication.')]
+    #[Assert\Type(type: 'integer', message: 'Quantity must be a whole number.')]
+    #[Assert\GreaterThan(value: 0, message: 'Quantity must be greater than 0.')]
     private ?int $quantity = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Please provide a description for the medication.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Description cannot be longer than {{ limit }} characters. Please provide a brief description.'
+    )]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?float $price = null;
+    /**
+     * @Vich\UploadableField(mapping="medicament_images", fileNameProperty="image")
+     */
+    private ?File $imageFile = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    #[ORM\Column(length: 255, options: ['default' => 'default_image.jpg'])]
+    private ?string $image = 'default_image.jpg';
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'Please specify the price of the medication.')]
+    #[Assert\Type(type: 'float', message: 'Price must be a valid number.')]
+    #[Assert\GreaterThan(value: 0, message: 'Price must be greater than 0.')]
+    private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'medicament_list')]
     private ?Commande $commande = null;
@@ -84,16 +106,26 @@ class Medicament
         return $this;
     }
 
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile): void
+    {
+        $this->imageFile = $imageFile;
+
+     
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): void
     {
         $this->image = $image;
-
-        return $this;
     }
 
     public function getCommande(): ?Commande

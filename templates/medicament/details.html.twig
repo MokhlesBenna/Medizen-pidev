@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+            <p class="d-inline-block border rounded-pill py-1 px-4">Wellspring Pharmacy</p>
+            <h1>Store</h1>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6 pe-lg-0 wow fadeIn" data-wow-delay="0.5s" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                                        <img src="{{ asset('img/' ~ medicament.image) }}" " class="img-thumbnail" style="max-width: 100px;">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 mb-6">
+                <div class="card h-100 service-item shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-center">{{ medicament.name }}</h4>
+                        <p class="card-text">{{ medicament.description }}</p>
+
+                        <!-- Quantity input on a new line -->
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity: {{ medicament.quantity }}</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                        </div>
+
+                        <!-- Price on a new line -->
+                        <div class="mb-3">
+                            <span class="text-muted">Price: {{ medicament.price }} €</span>
+                        </div>
+
+                        <!-- "Sell Medicament" button on a new line -->
+                        <div>
+                            <a href="{{ path('sell_medicament', {'id': medicament.id, 'quantity': 1}) }}" class="btn btn-primary">Sell Medicament</a>
+                        </div>
+
+                        <!-- Flash messages for error handling -->
+                        {% for flash_message in app.flashes('danger') %}
+                            <div class="alert alert-danger mt-3">
+                                {{ flash_message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

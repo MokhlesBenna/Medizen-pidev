@@ -1,0 +1,51 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create New Commande</h2>
+
+    <div class="card my-attractive-form wow fadeInUp" data-wow-delay="0.5s">
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+
+            <div class="mb-3">
+                {{ form_label(form.totalprice, 'Total Price') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    {{ form_widget(form.totalprice, {'attr': {'class': 'form-control', 'placeholder': 'Enter total price'}}) }}
+                </div>
+                {{ form_errors(form.totalprice) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.quantity_ordered, 'Quantity Ordered') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-flask"></i></span>
+                    {{ form_widget(form.quantity_ordered, {'attr': {'class': 'form-control', 'placeholder': 'Enter quantity ordered'}}) }}
+                </div>
+                {{ form_errors(form.quantity_ordered) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.date_ordered, 'Date Ordered') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    {{ form_widget(form.date_ordered, {'attr': {'class': 'form-control', 'placeholder': 'Enter date ordered'}}) }}
+                </div>
+                {{ form_errors(form.date_ordered) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.status, 'Status') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control', 'placeholder': 'Enter status'}}) }}
+                </div>
+                {{ form_errors(form.status) }}
+            </div>
+
+            <!-- You may want to add a form collection for the associated Medicaments if needed -->
+
+            <button class="btn btn-primary btn-lg"><i class="fas fa-save"></i> {{ button_label|default('Save') }}</button>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

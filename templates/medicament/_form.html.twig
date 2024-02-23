@@ -1,0 +1,62 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Add New Medication</h2>
+
+    <div class="card my-attractive-form wow fadeInUp" data-wow-delay="0.5s">
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+                   {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+            <div class="mb-3">
+                {{ form_label(form.name, 'Medication Name') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-pills"></i></span>
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter medication name'}}) }}
+                </div>
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.quantity, 'Quantity') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-flask"></i></span>
+                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control', 'placeholder': 'Enter quantity'}}) }}
+                </div>
+                {{ form_errors(form.quantity) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.description, 'Description') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter description'}}) }}
+                </div>
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-3">
+
+       
+    <div class="mb-3">
+    {{ form_label(form.imageFile, 'Image') }}
+    {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+             
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.price, 'Price') }}
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                    {{ form_widget(form.price, {'attr': {'class': 'form-control', 'placeholder': 'Enter price'}}) }}
+                </div>
+                {{ form_errors(form.price) }}
+            </div>
+
+            <button class="btn btn-primary btn-lg"><i class="fas fa-save"></i> {{ button_label|default('Save') }}</button>
+
+            {{ form_end(form) }}
+            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}New Medicament{% endblock %}
+
+{% block body %}
+    
+
+    {{ include('medicament/_form.html.twig') }}
+
+ <a class="btn btn-primary" href="{{ path('app_medicament_all') }}"><i class="fa fa-plus me-2"></i>back to list</a>
+{% endblock %}

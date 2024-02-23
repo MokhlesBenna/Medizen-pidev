@@ -11,3 +11,5 @@ when@test:
     framework:
         validation:
             not_compromised_password: false
+parameters:
+    medicament_images_directory: '%kernel.project_dir%/public/img'

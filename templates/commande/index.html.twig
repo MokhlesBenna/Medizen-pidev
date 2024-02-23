@@ -1,0 +1,59 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Liste des Commandes{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-dark mb-4 wow fadeInDown">Liste des Commandes</h1>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <a href="{{ path('app_commande_new') }}" class="btn btn-success btn-lg wow fadeInLeft" data-wow-delay="0.3s">Ajouter une Commande</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {% if commandes|length > 0 %}
+                    <div class="table-responsive wow fadeInUp" data-wow-delay="0.5s">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Total Price</th>
+                                    <th scope="col">Quantity Ordered</th>
+                                    <th scope="col">Date Ordered</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commande in commandes %}
+                                    <tr>
+                                        <td>{{ commande.id }}</td>
+                                        <td>{{ commande.totalprice }}</td>
+                                        <td>{{ commande.quantityOrdered }}</td>
+                                        <td>{{ commande.dateOrdered ? commande.dateOrdered|date('Y-m-d') : 'N/A' }}</td>
+                                        <td>{{ commande.status }}</td>
+                                        <td>
+                                            <a href="{{ path('app_commande_show', {'id': commande.id}) }}" class="btn btn-info btn-sm wow fadeInLeft" data-wow-delay="0.7s">Voir</a>
+                                            <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" class="btn btn-warning btn-sm wow fadeInRight" data-wow-delay="0.7s">Modifier</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted wow fadeIn" data-wow-delay="0.7s">Aucun enregistrement trouvé.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Add the following CSS for the wow animations -->
+    <style>
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+    </style>
+
+{% endblock %}

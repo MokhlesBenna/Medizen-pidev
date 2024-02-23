@@ -25,8 +25,8 @@ class Commande
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_ordered = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+        #[ORM\Column(length: 255)]
+        private ?string $status = null;
 
     #[ORM\OneToMany(targetEntity: Medicament::class, mappedBy: 'commande')]
     private Collection $medicament_list;
@@ -46,7 +46,7 @@ class Commande
         return $this->totalprice;
     }
 
-    public function setTotalprice(float $totalprice): static
+    public function setTotalprice(float $totalprice): self
     {
         $this->totalprice = $totalprice;
 
@@ -58,7 +58,7 @@ class Commande
         return $this->quantity_ordered;
     }
 
-    public function setQuantityOrdered(int $quantity_ordered): static
+    public function setQuantityOrdered(int $quantity_ordered): self
     {
         $this->quantity_ordered = $quantity_ordered;
 
@@ -70,7 +70,7 @@ class Commande
         return $this->date_ordered;
     }
 
-    public function setDateOrdered(\DateTimeInterface $date_ordered): static
+    public function setDateOrdered(\DateTimeInterface $date_ordered): self
     {
         $this->date_ordered = $date_ordered;
 
@@ -82,7 +82,7 @@ class Commande
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -97,7 +97,7 @@ class Commande
         return $this->medicament_list;
     }
 
-    public function addMedicamentList(Medicament $medicamentList): static
+    public function addMedicamentList(Medicament $medicamentList): self
     {
         if (!$this->medicament_list->contains($medicamentList)) {
             $this->medicament_list->add($medicamentList);
@@ -107,7 +107,7 @@ class Commande
         return $this;
     }
 
-    public function removeMedicamentList(Medicament $medicamentList): static
+    public function removeMedicamentList(Medicament $medicamentList): self
     {
         if ($this->medicament_list->removeElement($medicamentList)) {
             // set the owning side to null (unless already changed)
@@ -118,5 +118,17 @@ class Commande
 
         return $this;
     }
-    
+
+    public function calculateTotalPrice(): float
+    {
+        $totalPrice = 0.0;
+
+        // Iterate through the medicament_list collection
+        foreach ($this->medicament_list as $medicament) {
+            // Calculate the total price for each medicament and add it to the total
+            $totalPrice += $medicament->getPrice() * $medicament->getQuantity();
+        }
+
+        return $totalPrice;
+    }
 }

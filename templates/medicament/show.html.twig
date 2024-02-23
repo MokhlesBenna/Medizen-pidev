@@ -1,0 +1,45 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Medicament Details{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Medicament Details</h2>
+
+        <div class="card my-attractive-details wow fadeInUp" data-wow-delay="0.5s">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ medicament.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Quantity</th>
+                            <td>{{ medicament.quantity }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ medicament.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Image</th>
+                            <td>
+                                        <img src="{{ asset('img/' ~ medicament.image) }}" " class="img-thumbnail" style="max-width: 100px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>{{ medicament.price }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+           
+         <a class="btn btn-primary" href="{{ path('app_medicament_all') }}"><i class="fa fa-plus me-2"></i>back to list</a>
+          <a class="btn btn-primary" href="{{ path('app_medicament_delete', {'id': medicament.id}) }}"><i class="fa fa-plus me-2"></i>delete</a>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
