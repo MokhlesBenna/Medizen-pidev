@@ -12,17 +12,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Knp\Component\Pager\PaginatorInterface;
 #[Route('/medicament')]
 class MedicamentController extends AbstractController
 {
   
     #[Route('/', name: 'app_medicament_index', methods: ['GET'])]
-    public function index(MedicamentRepository $medicamentRepository): Response
+    public function index(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
         $medicaments = $medicamentRepository->findAll();
-
+    
+        // Paginate the results
+        $pagination = $paginator->paginate(
+            $medicaments, // Query, not result
+            $request->query->getInt('page', 1), // Page number
+            6 // Limit per page
+        );
+    
         return $this->render('medicament/listmedicament.html.twig', [
-            'medicaments' => $medicaments,
+            'pagination' => $pagination,
         ]);
     }
     #[Route('/all', name: 'app_medicament_all', methods: ['GET'])]
@@ -33,9 +41,7 @@ class MedicamentController extends AbstractController
         return $this->render('medicament/index.html.twig', [
             'medicaments' => $medicaments,
         ]);
- 
 
-        // ...
     }
     #[Route('/new', name: 'app_medicament_new', methods: ['GET', 'POST'])]
 public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -173,7 +179,6 @@ private function handleFileUpload(Medicament $medicament): void
         ]);
     }
     #[Route('/sell/{id}/{quantity}', name: 'sell_medicament')]
-
     public function sellMedicament(
         int $id,
         int $quantity,
@@ -195,37 +200,35 @@ private function handleFileUpload(Medicament $medicament): void
             return $this->redirectToRoute('medicament_details', ['id' => $medicament->getId()]);
         }
     
-      
-if ($medicament->getQuantity() >= $quantity) {
+        if ($medicament->getQuantity() >= $quantity) {
+            $medicament->setQuantity($medicament->getQuantity() - $quantity);
     
-    $medicament->setQuantity($medicament->getQuantity() - $quantity);
-
+            $commande = new Commande();
+            $commande->setQuantityOrdered($quantity);
+            $commande->setDateOrdered(new \DateTime());
     
-    $commande = new Commande();
-    $commande->setQuantityOrdered($quantity);
-    $commande->setDateOrdered(new \DateTime());
+            $medicament->getQuantity() > 0 ? $commande->setStatus('in_stock') : $commande->setStatus('out_of_stock');
     
-   
-    $medicament->getQuantity() > 0 ? $commande->setStatus('in_stock') : $commande->setStatus('out_of_stock');
+            $totalPrice = $medicament->getPrice() * $quantity;
+            $commande->setTotalprice($totalPrice);
     
-    $totalPrice = $medicament->getPrice() * $quantity;
-    $commande->setTotalprice($totalPrice);
-
+            $commande->addMedicamentList($medicament);
     
-    $commande->addMedicamentList($medicament);
-
-    // Save changes
-    $entityManager->persist($commande);
-    $entityManager->flush();
-
-    // Render the confirmation template
-    return $this->render('commande/confirm_commande.html.twig', [
-        'commande' => $commande,
-    ]);
-} else {
-    $this->addFlash('danger', 'Not enough quantity available.');
-    return $this->redirectToRoute('medicament_details', ['id' => $medicament->getId()]);
-}
+            // Persist both Medicament and Commande
+            $entityManager->persist($medicament);
+            $entityManager->persist($commande);
+    
+            // Flush changes to the database
+            $entityManager->flush();
+    
+            // Render the confirmation template
+            return $this->render('commande/confirm_commande.html.twig', [
+                'commande' => $commande,
+            ]);
+        } else {
+            $this->addFlash('danger', 'Not enough quantity available.');
+            return $this->redirectToRoute('medicament_details', ['id' => $medicament->getId()]);
+        }
     }
     
     
