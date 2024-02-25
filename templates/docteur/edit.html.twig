@@ -9,28 +9,28 @@
             <form action="{{ path('app_docteur_edit', {'id': docteur.id}) }}" method="post">
                 {{ form_start(form) }}
                 <div class="form-group">
-                    {{ form_label(form.nom) }}
-                    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.nom, {'attr': {'class': 'form-control'}, 'label': 'Nom'}) }}
+                    <div class="text-danger">{{ form_errors(form.nom) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.prenom) }}
-                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.prenom, {'attr': {'class': 'form-control'}, 'label': 'Prénom'}) }}
+                    <div class="text-danger">{{ form_errors(form.prenom) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.mail) }}
-                    {{ form_widget(form.mail, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.mail, {'attr': {'class': 'form-control'}, 'label': 'E-mail'}) }}
+                    <div class="text-danger">{{ form_errors(form.mail) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.experience) }}
-                    {{ form_widget(form.experience, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.experience, {'attr': {'class': 'form-control'}, 'label': 'Expérience'}) }}
+                    <div class="text-danger">{{ form_errors(form.experience) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.mobile) }}
-                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.mobile, {'attr': {'class': 'form-control'}, 'label': 'Mobile'}) }}
+                    <div class="text-danger">{{ form_errors(form.mobile) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.addresse) }}
-                    {{ form_widget(form.addresse, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.addresse, {'attr': {'class': 'form-control'}, 'label': 'Adresse'}) }}
+                    <div class="text-danger">{{ form_errors(form.addresse) }}</div>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-md-6">

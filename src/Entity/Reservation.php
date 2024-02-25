@@ -14,16 +14,16 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom est obligatoire.")]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
     private ?string $surname = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "L'adresse est obligatoire.")]
+    #[Assert\NotBlank(message: 'L\'adresse est obligatoire.')]
+    #[Assert\Length(max: 255)]
     private ?string $address = null;
 
 
@@ -42,12 +42,23 @@ class Reservation
     
 
     #[ORM\Column(type: 'date')]
-    #[Assert\NotBlank(message: "La date de réservation est obligatoire.")]
-    private ?\DateTime $reservation_date = null;
-
-
-
+#[Assert\NotBlank(message: "La date de réservation est obligatoire.")]
+#[Assert\GreaterThanOrEqual("today", message:"Vérifiez votre date.")]
+private ?\DateTime $reservation_date = null;
     
+
+        public function setReservationDate(\DateTime $reservation_date): bool
+        {
+            $today = new \DateTime();
+            if ($reservation_date >= $today) {
+                $this->reservation_date = $reservation_date;
+                return true;
+            } else {
+                
+                return false;
+            }
+        }
+        
 
     #[ORM\Column(length: 255)]
     private ?string $id_user = "700";
@@ -135,12 +146,6 @@ class Reservation
         return $this->reservation_date;
     }
 
-    public function setReservationDate(\DateTime $reservation_date): static
-    {
-        $this->reservation_date = $reservation_date;
-
-        return $this;
-    }
 
     public function getIdUser(): ?string
     {
