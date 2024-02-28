@@ -165,19 +165,36 @@ private function handleFileUpload(Medicament $medicament): void
 
 
 
-    #[Route('/{id}/details', name: 'medicament_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function medicamentDetails(int $id, MedicamentRepository $medicamentRepository): Response
-    {
-        $medicament = $medicamentRepository->find($id);
+    
+#[Route('/{id}/details', name: 'medicament_details', methods: ['GET'], requirements: ['id' => '\d+'])]
+public function medicamentDetails(int $id, MedicamentRepository $medicamentRepository): Response
+{
+    $medicament = $medicamentRepository->find($id);
 
-        if (!$medicament) {
-            throw $this->createNotFoundException('Medicament not found');
-        }
-
-        return $this->render('medicament/details.html.twig', [
-            'medicament' => $medicament,
-        ]);
+    if (!$medicament) {
+        throw $this->createNotFoundException('Medicament not found');
     }
+
+    // Example: Add chatbot logic here
+    $chatbotMessages = $this->getChatbotMessages($medicament);
+
+    return $this->render('medicament/details.html.twig', [
+        'medicament' => $medicament,
+        'chatbotMessages' => $chatbotMessages,
+    ]);
+}
+
+private function getChatbotMessages(Medicament $medicament): array
+{
+    // Example: Implement chatbot logic based on the medicament details
+    // You can generate chatbot messages dynamically based on the medicament information
+    // For simplicity, this example returns a predefined set of messages
+    return [
+        'Hello! How can I assist you with the medicament ' . $medicament->getName() . '?',
+        'Do you have any specific questions about this medicament?',
+        // Add more messages as needed
+    ];
+}
     #[Route('/sell/{id}/{quantity}', name: 'sell_medicament')]
     public function sellMedicament(
         int $id,

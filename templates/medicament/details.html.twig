@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
 
 <div class="container-xxl py-5">
@@ -11,7 +12,7 @@
         <div class="row g-4">
             <div class="col-lg-6 pe-lg-0 wow fadeIn" data-wow-delay="0.5s" style="min-height: 400px;">
                 <div class="position-relative h-100">
-                                        <img src="{{ asset('img/' ~ medicament.image) }}" " class="img-thumbnail" style="max-width: 100px;">
+                    <img src="{{ asset('img/' ~ medicament.image) }}" alt="{{ medicament.name }}" class="card-img-top img-fluid">
                 </div>
             </div>
             <div class="col-md-6 col-lg-6 mb-6">
@@ -42,10 +43,67 @@
                                 {{ flash_message }}
                             </div>
                         {% endfor %}
+
+                        <!-- Chatbot input field and submit button -->
+                        <div class="mt-4">
+                            <input type="text" id="chatbot-input" class="form-control" placeholder="Ask a question...">
+                            <button onclick="askChatbot()" class="btn btn-secondary mt-2">Ask</button>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot container -->
+        <div id="chatbot-container" class="mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Chatbot</h5>
+                    <ul id="chatbot-messages">
+                        {% for message in chatbotMessages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function askChatbot() {
+        // Get the user's question from the input field
+        var userQuestion = document.getElementById('chatbot-input').value;
+
+        // Append the user's question to the chatbot messages
+        var chatbotMessages = document.getElementById('chatbot-messages');
+        var userQuestionElement = document.createElement('li');
+        userQuestionElement.innerText = 'You: ' + userQuestion;
+        chatbotMessages.appendChild(userQuestionElement);
+
+        // Simulate chatbot responses based on specific questions
+        var chatbotResponse = document.createElement('li');
+        if (userQuestion.toLowerCase().includes('gripex')) {
+            chatbotResponse.innerText = 'Chatbot: For Gripex, you should take it three times a day .';
+          
+        } else if (userQuestion.toLowerCase().includes('panadole1000')) {
+            chatbotResponse.innerText = 'Chatbot: Panadole 1000 is typically for adults. Please consult with a healthcare professional for personalized advice.';
+        } else if (userQuestion.toLowerCase().includes('glucophage')) {
+            chatbotResponse.innerText = 'Chatbot: Do you have any other diseases or conditions? This information can help provide more accurate guidance.';
+        }else if (userQuestion.toLowerCase().includes('yes')) {
+            chatbotResponse.innerText = 'Chatbot: tell me more about your conditions? This information can help provide more accurate guidance.';
+        }
+         else {
+            // Default response for other questions
+            chatbotResponse.innerText = 'Chatbot: Thank you for your question. I am a simple chatbot and cannot provide real answers.';
+        }
+
+        // Append the chatbot response to the messages
+        chatbotMessages.appendChild(chatbotResponse);
+
+        // Clear the input field after asking the question
+        document.getElementById('chatbot-input').value = '';
+    }
+</script>
+
 {% endblock %}

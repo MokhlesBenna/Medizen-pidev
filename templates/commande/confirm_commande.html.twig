@@ -17,13 +17,14 @@
                 <div class="card">
                     <div class="card-header">
                         Commande Details
-                    </div>
+                    </div>                  
+
                     {% for medicament in commande.getMedicamentList() %}
-                    <img src="{{ asset(medicament.image) }}" class="card-img-top" alt="{{ medicament.name }}" style="width: 150px; height: auto;">
+                    <img src="{{ asset('img/' ~ medicament.image) }}" class="card-img-top" alt="{{ medicament.name }}" style="width: 150px; height: auto;">
 
  {% endfor %}
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Commande ID:</strong> {{ commande.getId() }}</li>
+                        
                         <li class="list-group-item"><strong>Total Price:</strong> {{ commande.getTotalprice() }} €</li>
                         <li class="list-group-item"><strong>Quantity Ordered:</strong> {{ commande.getQuantityOrdered() }}</li>
                         <li class="list-group-item"><strong>Date Ordered:</strong> {{ commande.getDateOrdered() ? commande.getDateOrdered().format('Y-m-d') : 'N/A' }}</li>
