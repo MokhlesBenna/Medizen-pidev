@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+{% endblock %}
+
+{% block body %}
+	<!-- About Start -->
+	<div class="container-xxl py-5">
+		<div class="container">
+			<div class="row g-5">
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+					<div class="d-flex flex-column">
+						<img class="img-fluid rounded w-75 align-self-end" src="{{ asset('img/about-1.jpg') }}" alt="">
+						<img class="img-fluid rounded w-50 bg-white pt-3 pe-3" src="{{ asset('img/about-2.jpg') }}" alt="" style="margin-top: -25%;">
+					</div>
+				</div>
+				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+					<h2>{{ topic.Titre }}</h2>
+                    <p>{{ topic.Contenu }}</p>
+                    <p>Date de création : {{ topic.Datedecreation|date('Y-m-d H:i:s') }}</p>
+																																																																																																																																																																						
+					<p><i class="far fa-check-circle text-primary me-3"></i>Quality health care</p>
+                    <p><i class="far fa-check-circle text-primary me-3"></i>Only Qualified Doctors</p>
+                    <p><i class="far fa-check-circle text-primary me-3"></i>Medical Research Professionals</p>
+					<a href="{{ path('app_publication_new', {'topicId': topic.id}) }}" class="btn btn-primary w-100 py-3">Créer une nouvelle publication</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- About End -->
+{% endblock %}

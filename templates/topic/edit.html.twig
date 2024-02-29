@@ -1,0 +1,20 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Modifier le sujet{% endblock %}
+
+{% block body %}
+    
+    <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Modifier votre sujet</h5>
+
+    {{ include('topic/_form.html.twig') }}
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <a href="{{ path('app_topic_index') }}">Retour à la liste</a>
+{% endblock %}
