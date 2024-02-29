@@ -1,0 +1,62 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}sponseur index
+{% endblock %}
+
+{% block body %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<h1 class="text-center">sponseur index</h1>
+	<div class="row justify-content-center">
+		<div class="col-lg-12">
+
+			<table class="table table-borderless datatable">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Email</th>
+						<th scope="col">Numero</th>
+						<th scope="col">Logo</th>
+						<th scope="col">Pak</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for sponseur in sponseurs %}
+						<tr>
+							<td>{{ sponseur.id }}</td>
+							<td>{{ sponseur.nom }}</td>
+							<td>{{ sponseur.email }}</td>
+							<td>{{ sponseur.numero }}</td>
+							<td><img src="{{ sponseur.logo }}" class="card-img-top" alt="Image" style="max-width: 90%; max-height: 80px;"></td>
+							<td>{{ sponseur.pack }}</td>
+
+							<td>
+								<a href="{{ path('app_sponseur_show', {'id': sponseur.id}) }}" class="badge bg-success">
+									<i class="fas fa-eye"></i>
+								</a>
+								<a href="{{ path('app_sponseur_edit', {'id': sponseur.id}) }}" class="badge bg-warning">
+									<i class="fas fa-edit"></i>
+								</a>
+								<a href="{{ path('app_sponseur_delete', {'id': sponseur.id}) }}" class="badge bg-danger">
+									<i class="fas fa-trash-alt"></i>
+								</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="text-center">
+		<a href="{{ path('app_sponseur_new') }}" class="btn btn-primary">
+			<i class="fas fa-plus-circle"></i>
+			Ajouter
+		</a>
+	</div>
+{% endblock %}

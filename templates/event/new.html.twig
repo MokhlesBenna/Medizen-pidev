@@ -1,0 +1,13 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}New Event{% endblock %}
+
+{% block body %}
+    <h1>Create new Event</h1>
+    <div class="card">
+        <div class="card-body">
+            {{ include('event/_form.html.twig') }}
+            <a href={{ path('app_event_index') }} class="btn btn-primary">Liste</a>
+        </div>
+    </div>
+{% endblock %}

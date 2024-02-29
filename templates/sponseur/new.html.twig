@@ -1,0 +1,25 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}New sponseur
+{% endblock %}
+
+{% block body %}
+	<h1>Create new sponseur</h1>
+	<div class="row">
+		<div style="display: flex;align-items: center;justify-content: center;margin-top: 90px; padding: 18px;">
+			
+			<div class="card col-md-6">
+				<div class="card-body">
+					<h5 class="card-title">Ajouter un Sponseur</h5>
+                    {{ include('sponseur/_form.html.twig') }}
+
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+{% endblock %}

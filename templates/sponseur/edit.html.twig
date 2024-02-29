@@ -1,0 +1,14 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Modifier un Sponseur
+{% endblock %}
+
+{% block body %}
+	<h1>Modifier un  Sponseur</h1>
+
+	{{ include('sponseur/_form.html.twig', {'button_label': 'Update'}) }}
+
+	<a href="{{ path('app_sponseur_index') }}">back to list</a>
+
+	{{ include('sponseur/_delete_form.html.twig') }}
+{% endblock %}
