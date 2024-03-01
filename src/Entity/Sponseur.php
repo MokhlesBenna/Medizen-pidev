@@ -53,12 +53,7 @@ class Sponseur
     private ?int $numero = null;
 
     #[ORM\Column(length: 255)]
-    /**
-     * @Assert\NotBlank(message="Ce champ doit être renseigné")
-     * @Assert\Url(
-     *     message="L'URL '{{ value }}' n'est pas une URL valide."
-     * )
-     */
+    
     private ?string $logo = null;
 
     #[ORM\Column(length: 255)]

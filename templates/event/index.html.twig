@@ -3,62 +3,65 @@
 {% block title %}Event index
 {% endblock %}
 
-{% block body %}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-	<h1 class="text-center">Event index</h1>
-	<div class="row justify-content-center">
-		<div class="col-lg-10">
-			<div class="table-responsive">
-				<table class="table table-borderless table-sm datatable">
-					<thead>
-						<tr>
-							<th scope="col">Id</th>
-							<th scope="col">Titre</th>
-							<th scope="col">DateDebut</th>
-							<th scope="col">DateFin</th>
-							<th scope="col">Lieu</th>
-							<th scope="col">Description</th>
-							<th scope="col">Image</th>
-							<th scope="col">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for event in events %}
-							<tr>
-								<td>{{ event.id }}</td>
-								<td>{{ event.titre }}</td>
-								<td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
-								<td>{{ event.dateFin ? event.dateFin|date('Y-m-d H:i:s') : '' }}</td>
-								<td>{{ event.lieu }}</td>
-								<td>{{ event.description }}</td>
-								<td><img src="{{ event.image }}" class="card-img-top" alt="Image" style="max-width: 120%; max-height: 100px;"></td>
-								<td>
-									<a href="{{ path('app_event_detail', {'id': event.id}) }}" class="badge bg-success">
-										<i class="fas fa-eye"></i>
-									</a>
-									<a href="{{ path('app_event_edit', {'id': event.id}) }}" class="badge bg-warning">
-										<i class="fas fa-edit"></i>
-									</a>
-									<a href="{{ path('app_event_delete', {'id': event.id}) }}" class="badge bg-danger">
-										<i class="fas fa-trash-alt"></i>
-									</a>
-								</td>
-							</tr>
-						{% else %}
-							<tr>
-								<td colspan="7">no records found</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
 
-	<div class="text-center">
-		<a href="{{ path('app_event_new') }}" class="btn btn-primary">
-			<i class="fas fa-plus-circle"></i>
-			Ajouter
-		</a>
+{% block body %}
+
+	<input type="text" id="searchInput" placeholder="Rechercher un événement...">
+
+	<script src="{{ asset('js/search.js') }}"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<div class="card-body pb-0">
+		<h5 class="card-title">Evenements
+			<span>| MediZen</span>
+		</h5>
+
+
+		<table class="table table-borderless">
+			<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Titre</th>
+					<th scope="col">DateDebut</th>
+					<th scope="col">DateFin</th>
+					<th scope="col">Lieu</th>
+					<th scope="col">Description</th>
+					<th scope="col">Image</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.titre }}</td>
+						<td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.dateFin ? event.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.lieu }}</td>
+						<td>{{ event.description }}</td>
+						<td><img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Event Image" style="max-width: 60px; max-height: 60px;"></td>
+						<td>
+							<a href="{{ path('app_event_delete', {'id': event.id}) }}" class="badge bg-danger">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+							<a href="{{ path('app_event_edit', {'id': event.id}) }}" class="badge bg-warning">
+								<i class="fas fa-edit"></i>
+							</a>
+							<a href="{{ path('app_event_show', {'id': event.id}) }}" class="badge bg-success">
+								<i class=" fas fa-eye"></i>
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="7">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
 	</div>
-{% endblock %}
+</tbody>
+<div class="text-center">
+	<a href="{{ path('app_event_new') }}" class="btn btn-primary">
+		<i class="fas fa-plus-circle"></i>Ajouter</a>
+</div>{% endblock %}

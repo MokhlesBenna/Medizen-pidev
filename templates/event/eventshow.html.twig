@@ -11,32 +11,37 @@
 				</div>
 
 				<div class="row g-4">
-					{% for key, event in events %}
+					{% for key, event in pagination %}
 						<div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
 							<div class="team-item position-relative rounded overflow-hidden">
 								<div class="overflow-hidden">
-									<img src="{{ event.image }}" class="card-img-top" alt="Image"></td>
-							</div>
-							<div class="team-text bg-light text-center p-4">
+									<img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Event Image" style="max-width: 500px; max-height: 600px;">
+								</div>
 
-								<h8 class="card-title">{{ event.titre }}</h8>
-							</p>
-							<a href="{{ path('event_details_admin', {'id': event.id}) }}" class="btn btn-primary">Details</a>
-							<div class="team-social text-center">
-								<a class="btn btn-square" href="">
-									<i class="fab fa-facebook-f"></i>
-								</a>
-								<a class="btn btn-square" href="">
-									<i class="fab fa-twitter"></i>
-								</a>
-								<a class="btn btn-square" href="">
-									<i class="fab fa-instagram"></i>
-								</a>
+								<div class="team-text bg-light text-center p-4">
+
+									<h8 class="card-title">{{ event.titre }}</h8>
+								</p>
+								<a href="{{ path('event_details_admin', {'id': event.id}) }}" class="btn btn-primary">Details</a>
+								<div class="team-social text-center">
+									<a class="btn btn-square" href="">
+										<i class="fab fa-facebook-f"></i>
+									</a>
+									<a class="btn btn-square" href="">
+										<i class="fab fa-twitter"></i>
+									</a>
+									<a class="btn btn-square" href="">
+										<i class="fab fa-instagram"></i>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			{% endfor %}
+				{% endfor %}
+			</div>
 		</div>
 	</body>
-</div></body>{% endblock %}
+</div></body><nav aria-label="Page navigation">
+<ul class="pagination justify-content-center">
+	{{ knp_pagination_render(pagination) }}
+</ul></nav>{% endblock %}

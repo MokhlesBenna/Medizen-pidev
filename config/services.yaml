@@ -4,8 +4,13 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    event_directory: '%kernel.project_dir%/public/uploads/events'
+    sponseur_directory: '%kernel.project_dir%/public/uploads/sponseurs'
 services:
+    App\Validator\Constraints\UniqueEventValidator:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraints\UniqueEvent;  // Corrigé la casse ici
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -19,11 +20,12 @@ class Event
     #[ORM\Column(length: 255)]
     /**
      * @Assert\NotBlank(message="Ce champ titre doit etre non vide")
+     * @UniqueEvent  // Corrigé la casse ici
      * @Assert\Length(
-     *      min = 5,
-     *      max = 100,
-     *      minMessage = "Le nom doit dépasser les 5 caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser 50 caractères"
+     *     min = 5,
+     *     max = 100,
+     *     minMessage = "Le nom doit dépasser les 5 caractères",
+     *     maxMessage = "Le nom ne doit pas dépasser 50 caractères"
      * )
      * @Assert\Regex(
      *     pattern="/\d/",
@@ -70,10 +72,7 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    /**
-     * @Assert\NotBlank(message="L'URL de l'image ne peut pas être vide.")
-     * @Assert\Url(message="Veuillez saisir une URL valide pour l'image.")
-     */
+    
     private ?string $image = null;
 
     #[ORM\ManyToMany(targetEntity: Sponseur::class, inversedBy: 'events')]
@@ -82,7 +81,6 @@ class Event
     public function __construct()
     {
         $this->sponsor_list = new ArrayCollection();
-       
     }
 
     public function getId(): ?int

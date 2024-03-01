@@ -10,6 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Knp\Component\Pager\PaginatorInterface;
+
+
 
 #[Route('/event')]
 class EventController extends AbstractController
@@ -47,13 +52,37 @@ class EventController extends AbstractController
     }
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,SluggerInterface $slugger ): Response
     {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($image) {
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $image->move(
+                        $this->getParameter('event_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $event->setImage($newFilename);
+            }
             $entityManager->persist($event);
             $entityManager->flush();
 
@@ -67,18 +96,19 @@ class EventController extends AbstractController
     }
 
     #[Route('/admin/event/{id}/details', name: 'event_details_admin', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function eventDetails(int $id, eventRepository $eventRepository): Response
-    {
-        $event = $eventRepository->find($id);
+public function eventDetails(int $id, EventRepository $eventRepository): Response
+{
+    $event = $eventRepository->find($id);
 
-        if (!$event) {
-            throw $this->createNotFoundException('Event not found');
-        }
-
-        return $this->render('event/details.html.twig', [
-            'event' => $event,
-        ]);
+    if (!$event) {
+        throw $this->createNotFoundException('Event not found');
     }
+
+    return $this->render('event/details.html.twig', [
+        'event' => $event,
+    ]);
+}
+
 
     
     #[Route('/admin/event', name: 'app_event_index_admin')]
@@ -128,14 +158,40 @@ class EventController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_event_delete', methods: ['POST'])]
-    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($event);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+#[Route('/delete/{id}', name: 'app_event_delete', methods: ['GET', 'DELETE'])]
+public function deleteevent(int $id, EventRepository $eventRepository, EntityManagerInterface $entityManager): Response
+{
+    $event = $eventRepository->find($id);
+
+    if (!$event) {
+        throw $this->createNotFoundException('Event not found');
     }
+
+    $entityManager->remove($event);
+    $entityManager->flush();
+
+    // Ajoutez un message flash ou gérez la réponse selon les besoins
+
+    return $this->redirectToRoute('app_event_index');
+}
+
+#[Route('/', name: 'app_event_index', methods: ['GET'])]
+public function indexpagination(Request $request, eventRepository $eventRepository, PaginatorInterface $paginator): Response
+{
+    $events = $eventRepository->findAll();
+
+    // Paginate the results
+    $pagination = $paginator->paginate(
+        $events, // Query, not result
+        $request->query->getInt('page', 1), // Page number
+        6 // Limit per page
+    );
+
+    return $this->render('event/eventshow.html.twig', [
+        'pagination' => $pagination,
+    ]);
+}
+    
+
 }
