@@ -10,13 +10,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/docteur')]
 class DocteurController extends AbstractController
 {
     #[Route('/', name: 'app_docteur_index', methods: ['GET'])]
-    public function index(DocteurRepository $docteurRepository): Response
+
+        public function index(DocteurRepository $docteurRepository, Request $request,PaginatorInterface $paginator): Response
     {
+        $query = $docteurRepository->createQueryBuilder('r')->getQuery();
+
+    $pagination=$docteurRepository->findAll();
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1), 
+        2 
+    );
         return $this->render('docteur/index.html.twig', [
             'docteurs' => $docteurRepository->findAll(),
         ]);

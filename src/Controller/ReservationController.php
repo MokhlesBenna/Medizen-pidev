@@ -1,36 +1,62 @@
 <?php
 
 namespace App\Controller;
-
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use App\Repository\DocteurRepository;
 use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;    
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
 
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository): Response
+    public function index(ReservationRepository $reservationRepository, Request $request,PaginatorInterface $paginator): Response
     {
-        return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
-        ]);
+        $query = $reservationRepository->createQueryBuilder('r')->getQuery();
+
+    $pagination=$reservationRepository->findAll();
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1), 
+        2 /* nombre d'éléments par page */
+    );
+
+    
+    return $this->render('reservation/index.html.twig', [
+        'reservations' => $pagination,
+    ]);
+        
     }
     #[Route('/admin', name: 'app_reservation_admin', methods: ['GET'])]
-    public function indexadmin(ReservationRepository $reservationRepository): Response
-    {
-        return $this->render('reservation/admin.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
-        ]);
-    }
+public function listeReservations(Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
+{
+    
+    $reservations = $reservationRepository->findAll();
+
+    
+    $pagination = $paginator->paginate(
+        $reservations,
+        $request->query->getInt('page', 1),
+        10 
+    );
+
+    
+    return $this->render('reservation/admin.html.twig', [
+        'reservations' => $pagination,
+    ]);
+}
+        
+    
 
     #[Route('/admin/reject/{id}', name: 'reject_reservation', methods: ['POST'])]
     public function rejectReservation(Reservation $reservation, EntityManagerInterface $entityManager): Response
@@ -120,4 +146,27 @@ public function edit(Request $request, Reservation $reservation, EntityManagerIn
             'reservation' => $reservation,
         ]);
 }
+
+
+#[Route('/page', name: 'page', methods: ['GET'])]
+public function pagination(Request $request, ReservationRepository $repository ): Response
+{
+    $query = $repository->createQueryBuilder('e');
+
+    $paginator = new Paginator($query);
+    
+    $page = $request->query->getInt('page', 1);
+    $perPage = 10; 
+    $paginator
+        ->getQuery()
+        ->setFirstResult(($page - 1) * $perPage)
+        ->setMaxResults($perPage);
+
+   
+    return $this->render('reservation/index.html.twig', [
+        'reservations' => $repository->findAll(),
+        'paginator' => $paginator,
+    ]);
+}
+
 }

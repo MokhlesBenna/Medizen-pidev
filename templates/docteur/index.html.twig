@@ -40,6 +40,9 @@
                                 </div>
                             </td>
                         </tr>
+                         <div class="d-flex justify-content-center my-4">
+                    {{ knp_pagination_render(docteurs) }}
+                </div>
                         {% else %}
                         <tr>
                             <td colspan="7">Aucun enregistrement trouvé</td>

@@ -22,7 +22,7 @@
                     <tbody>
                         {% for reservation in reservations %}
                         <tr>
-                            
+                            <td>{{ reservation.name }}</td>
                             <td>{{ reservation.surname }}</td>
                             <td>{{ reservation.mobile }}</td>
                             <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
@@ -30,72 +30,30 @@
                             <td>
                                 <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
                                 <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
-                                <form action="{{ path('app_reservation_delete', {'id': reservation.id}) }}" method="post" style="display: inline-block;">
+                                <form action="{{ path('app_reservation_delete', {'id': reservation.id}) }}" method="post" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation?')">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation?')">Supprimer</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
                                 </form>
                             </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">Aucun enregistrement trouvé</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center my-4">
+                    {{ knp_pagination_render(reservations) }}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="homesection howsteps" style="background:#ffffff!important;text-align:center;">
-    <div class="pf-container">
-        <h2 class="maintxt">Pourquoi prendre rendez-vous avec Medizen</h2>
-        <p class="subtitle">Avec Medizen, prenez rendez-vous en ligne avec votre médecin autrement</p>
-
-        <div class="carousel-container">
-            <div class="carousel" id="carousel">
-                <div class="item">
-                    <img src="https://cdn.med.tn/img/step1.svg" alt="Accédez rapidement à votre médecin">
-                    <p>Accédez rapidement à votre médecin</p>
-                </div>
-                <div class="item">
-                    <img src="https://cdn.med.tn/img/step2.svg" alt="Prenez rendez-vous en ligne à tout moment">
-                    <p>Prenez rendez-vous en ligne à tout moment</p>
-                </div>
-                <div class="item">
-                    <img src="https://cdn.med.tn/img/step3.svg" alt="Recevez des sms/mail de rappel personnalisés">
-                    <p>Recevez des sms/mail de rappel personnalisés</p>
-                </div>
-            </div>
-        </div>
-        <div class="container text-center my-4">
-            <a href="{{ path('app_reservation_new') }}" class="btn btn-primary">Réserver Maintenant!</a>
-        </div>
-    </div>
+<div class="container text-center my-4">
+    <a href="{{ path('app_reservation_new') }}" class="btn btn-primary">Réserver Maintenant!</a>
 </div>
-
-<style>
-.carousel-container {
-    overflow: hidden;
-}
-
-.carousel {
-    display: flex;
-    scroll-snap-type: x mandatory;
-    white-space: nowrap;
-    overflow-x: auto;
-}
-
-.item {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    padding: 0 10px;
-    text-align: center;
-    width: 33.33%;
-}
-
-.item img {
-    max-width: 100%;
-    height: auto;
-}
-</style>
 
 {% endblock %}

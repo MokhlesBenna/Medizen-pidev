@@ -14,17 +14,12 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
-    #[Assert\Length(max: 255)]
-    private ?string $name = null;
+   
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
     private ?string $surname = null;
 
-    #[Assert\NotBlank(message: 'L\'adresse est obligatoire.')]
-    #[Assert\Length(max: 255)]
-    private ?string $address = null;
 
 
 
@@ -42,7 +37,7 @@ class Reservation
     
 
     #[ORM\Column(type: 'date')]
-#[Assert\NotBlank(message: "La date de réservation est obligatoire.")]
+#[Assert\NotBlank(message: "Veuillez choisir une date valide!.")]
 #[Assert\GreaterThanOrEqual("today", message:"Vérifiez votre date.")]
 private ?\DateTime $reservation_date = null;
     
@@ -66,6 +61,16 @@ private ?\DateTime $reservation_date = null;
     #[ORM\Column(length: 255)]
     private ?string $status ="pending";
 
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[Assert\NotBlank(message: 'L\'adresse est obligatoire.')]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
+    
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Docteur $doctor = null;
