@@ -43,19 +43,24 @@
                         {{ form_row(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse'}}) }}
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.reservation_date, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_row(form.reservation_date, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionnez la date et l\'heure'}}) }}
                     </div>
                     <div class="mb-3">
                         {{ form_row(form.problem_description, {'attr': {'class': 'form-control', 'rows': '3', 'placeholder': 'Décrivez votre problème'}}) }}
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.doctor, {'attr': {'class': 'form-select', 'required': 'required'}}) }}
+                        {{ form_row(form.doctor, {'attr': {'class': 'form-select','placeholder': 'Sélectionnez le docteur qui vous convient', 'required': 'required'}}) }}
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Réserver un rendez-vous</button>
                 </div>
+                
                 {{ form_end(form) }}
+                
             </div>
         </div>
     </div>
 </div>
+
+
+
 {% endblock %}

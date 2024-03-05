@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Form;
 
@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType; // Import DateTimeType
 use App\Entity\Docteur;
 
 class ReservationType extends AbstractType
@@ -19,7 +20,7 @@ class ReservationType extends AbstractType
             ->add('surname')
             ->add('address', TextType::class)
             ->add('mobile')
-            ->add('reservation_date')
+            ->add('reservation_date', DateTimeType::class)
             ->add('problem_description', TextType::class) 
             ->add('doctor', EntityType::class, [
                 'class' => Docteur::class,

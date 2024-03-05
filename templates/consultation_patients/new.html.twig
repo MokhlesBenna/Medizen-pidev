@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle ConsultationPatient{% endblock %}
+
+{% block body %}
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="mb-4">
+                    <h1 class="fw-bold">Ajouter rapidement une consultation </h1>
+                    <p class="lead">Remplissez le formulaire ci-joint pour créer une nouvelle consultation</p>
+                </div>
+                <div class="bg-light rounded d-flex align-items-center p-4 mb-4">
+                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 55px; height: 55px;">
+                        <i class="fa fa-user-md"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="mb-2">Pour toute réclamation, appelez-nous maintenant</p>
+                        <h5 class="mb-0">+216 12 345 678</h5>
+                    </div>
+                </div>
+                <div class="bg-light rounded d-flex align-items-center p-4">
+                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 55px; height: 55px;">
+                        <i class="fa fa-envelope-open"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="mb-2">Pour tout type, envoyez-nous un e-mail maintenant</p>
+                        <h5 class="mb-0">medizen@gmail.com</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
+                {{ form_start(form, { 'attr': { 'novalidate': 'novalidate' } }) }}
+                <div class="bg-light rounded p-5 mb-4">
+                    <div class="mb-3">
+                        {{ form_row(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom du patient'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.surname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom du patient'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.remarquesDesDocteurs, {'attr': {'class': 'form-control', 'placeholder': 'Mettez vos remarques ici!'}}) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.reservation_date, {'attr': {'class': 'form-control datepicker', 'placeholder': 'Date de réservation'}}) }}
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Créer Consultation</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+<script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy', 
+            autoclose: true
+        });
+    });
+</script>
+{% endblock %}

@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Consultation;
+use App\Entity\ConsultationPatient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Consultation>
+ * @extends ServiceEntityRepository<ConsultationPatient>
  *
- * @method Consultation|null find($id, $lockMode = null, $lockVersion = null)
- * @method Consultation|null findOneBy(array $criteria, array $orderBy = null)
- * @method Consultation[]    findAll()
- * @method Consultation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ConsultationPatient|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ConsultationPatient|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ConsultationPatient[]    findAll()
+ * @method ConsultationPatient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ConsultationRepository extends ServiceEntityRepository
+class ConsultationPatientRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Consultation::class);
+        parent::__construct($registry, ConsultationPatient::class);
     }
 
 //    /**
-//     * @return Consultation[] Returns an array of Consultation objects
+//     * @return ConsultationPatient[] Returns an array of ConsultationPatient objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class ConsultationRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Consultation
+//    public function findOneBySomeField($value): ?ConsultationPatient
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

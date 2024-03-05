@@ -2,27 +2,27 @@
 
 namespace App\Form;
 
-use App\Entity\Consultation;
+use App\Entity\ConsultationPatient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ConsultationType extends AbstractType
+class ConsultationPatientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('Nom')
-            ->add('prenom')
+        $builder    
+            ->add('name')
+            ->add('surname')
+            ->add('remarquesDesDocteurs')
             ->add('reservation_date')
-            ->add('RemarquesMedecin')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Consultation::class,
+            'data_class' => ConsultationPatient::class,
         ]);
     }
 }

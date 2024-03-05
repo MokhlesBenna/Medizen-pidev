@@ -14,7 +14,10 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-   
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
@@ -61,10 +64,7 @@ private ?\DateTime $reservation_date = null;
     #[ORM\Column(length: 255)]
     private ?string $status ="pending";
 
-    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
-    #[Assert\Length(max: 255)]
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+   
 
     #[Assert\NotBlank(message: 'L\'adresse est obligatoire.')]
     #[Assert\Length(max: 255)]
@@ -190,7 +190,10 @@ private ?\DateTime $reservation_date = null;
 
    
 
-   
+    public function __toString(): string
+{
+    return $this->reservation_date->format('Y-m-d'); 
+}
 
    
    

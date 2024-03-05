@@ -28,7 +28,7 @@ class ReservationController extends AbstractController
     $pagination = $paginator->paginate(
         $query,
         $request->query->getInt('page', 1), 
-        2 /* nombre d'éléments par page */
+        2 
     );
 
     
@@ -83,29 +83,39 @@ public function listeReservations(Request $request, PaginatorInterface $paginato
 
     #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, DocteurRepository $docteurRepository): Response
-    {
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation);
+{
+    $reservation = new Reservation();
+    $form = $this->createForm(ReservationType::class, $reservation);
 
-        $form->handleRequest($request);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($reservation->setReservationDate($form->get('reservation_date')->getData())) {
-                $entityManager->persist($reservation);
-                $entityManager->flush();
-                $this->addFlash('success', 'Votre rendez-vous a été réservé avec succès.');
-                return $this->redirectToRoute('app_reservation_new');
-            } else {
-                $this->addFlash('error', 'La date de réservation doit être aujourd\'hui ou dans le futur.');
-                return $this->redirectToRoute('app_reservation_new');
-            }
+    if ($form->isSubmitted() && $form->isValid()) {
+        $reservationDate = $form->get('reservation_date')->getData();
+        $heure = $reservationDate->format('H');
+
+        // Vérifie si l'heure de réservation est entre 9h et 17h
+        if ($heure < 9 || $heure > 17) {
+            $this->addFlash('error', 'L\'heure de réservation doit être comprise entre 9h et 17h.');
+            return $this->redirectToRoute('app_reservation_new');
         }
 
-        return $this->render('reservation/new.html.twig', [
-            'form' => $form->createView(),
-            'docteurs' => $docteurRepository->findAll(),
-        ]);
+        // Si la date de réservation est dans le futur
+        if ($reservation->setReservationDate($reservationDate)) {
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre rendez-vous a été réservé avec succès.');
+            return $this->redirectToRoute('app_reservation_new');
+        } else {
+            $this->addFlash('error', 'La date de réservation doit être aujourd\'hui ou dans le futur.');
+            return $this->redirectToRoute('app_reservation_new');
+        }
     }
+
+    return $this->render('reservation/new.html.twig', [
+        'form' => $form->createView(),
+        'docteurs' => $docteurRepository->findAll(),    
+    ]);
+}
 
     #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
 public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response

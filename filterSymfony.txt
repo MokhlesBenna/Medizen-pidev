@@ -1,0 +1,31 @@
+/**
+     * @Route("/users/banned", name="show_banned_users", methods={"POST","GET"})
+    
+     */
+    public function showBannedUsersAction(Request $request,PaginatorInterface $paginator)
+    {
+
+        $userRepository = $this->getDoctrine()->getRepository(User::class);
+        $bannedUsers = $userRepository->findBy(['isBanned' => true]);
+        $searchQuery = $request->query->get('search');
+
+        $queryBuilder = $userRepository->createQueryBuilder('u');
+        $queryBuilder->where('u.isBanned = :isBanned')
+        ->setParameter('isBanned', true);
+        if ($searchQuery) {
+            $queryBuilder->andWhere('u.userFirstname LIKE :searchQuery')
+                ->setParameter('searchQuery', '%' . $searchQuery . '%');
+        }
+
+    $query = $queryBuilder->getQuery();
+        $bannedUsers = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1),
+            4
+        );
+
+        return $this->render('back/users.html.twig', [
+            'users' => $bannedUsers,
+            'searchQuery' => $searchQuery ,
+        ]);
+    }
