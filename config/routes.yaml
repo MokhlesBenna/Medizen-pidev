@@ -1,3 +1,9 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+generate_qr_code:
+    path: '/generate-qr-code/{id}'
+    controller: 'App\Controller\MedicamentController::generateQrCodeAction'
+    methods: ['GET']
+    requirements:
+        id: '\d+'

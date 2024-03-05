@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+
 #[ORM\Entity(repositoryClass: MedicamentRepository::class)]
 #[Vich\Uploadable]
 class Medicament
@@ -52,7 +53,24 @@ class Medicament
 
     #[ORM\ManyToOne(inversedBy: 'medicament_list')]
     private ?Commande $commande = null;
+  
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+     
+    private $qrCodePath;
 
+    
+
+    public function getQrCodePath(): ?string
+    {
+        return $this->qrCodePath;
+    }
+
+    public function setQrCodePath(string $qrCodePath): self
+    {
+        $this->qrCodePath = $qrCodePath;
+
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;

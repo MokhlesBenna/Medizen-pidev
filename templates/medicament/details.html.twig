@@ -32,6 +32,16 @@
                             <span class="text-muted">Price: {{ medicament.price }} €</span>
                         </div>
 
+                        <!-- QR Code on a new line -->
+                        <div class="mb-3">
+                            {% if medicament.qrCodePath %} 
+
+                                <img src="{{ asset('img/' ~  medicament.qrCodePath) }}" alt="QR Code" class="img-fluid" style="width: 100px;">
+                            {% else %}
+                                <p>No QR Code available for this medicament.</p>
+                            {% endif %}
+                        </div>
+
                         <!-- "Sell Medicament" button on a new line -->
                         <div>
                             <a href="{{ path('sell_medicament', {'id': medicament.id, 'quantity': 1}) }}" class="btn btn-primary">Sell Medicament</a>
@@ -84,16 +94,14 @@
         // Simulate chatbot responses based on specific questions
         var chatbotResponse = document.createElement('li');
         if (userQuestion.toLowerCase().includes('gripex')) {
-            chatbotResponse.innerText = 'Chatbot: For Gripex, you should take it three times a day .';
-          
+            chatbotResponse.innerText = 'Chatbot: For Gripex, you should take it three times a day.';
         } else if (userQuestion.toLowerCase().includes('panadole1000')) {
             chatbotResponse.innerText = 'Chatbot: Panadole 1000 is typically for adults. Please consult with a healthcare professional for personalized advice.';
         } else if (userQuestion.toLowerCase().includes('glucophage')) {
             chatbotResponse.innerText = 'Chatbot: Do you have any other diseases or conditions? This information can help provide more accurate guidance.';
-        }else if (userQuestion.toLowerCase().includes('yes')) {
+        } else if (userQuestion.toLowerCase().includes('yes')) {
             chatbotResponse.innerText = 'Chatbot: tell me more about your conditions? This information can help provide more accurate guidance.';
-        }
-         else {
+        } else {
             // Default response for other questions
             chatbotResponse.innerText = 'Chatbot: Thank you for your question. I am a simple chatbot and cannot provide real answers.';
         }

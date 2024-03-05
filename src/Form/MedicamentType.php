@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Medicament;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,6 +20,11 @@ class MedicamentType extends AbstractType
             ->add('price')
             ->add('imageFile', FileType::class, [
                 'label' => 'Image',
+                'required' => false,
+                
+            ])
+            ->add('qrCodePath', TextType::class, [
+                'label' => 'QR Code Path',
                 'required' => false,
             ]);
     }

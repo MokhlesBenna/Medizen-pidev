@@ -84,17 +84,16 @@ class CommandeController extends AbstractController
     #[Route('/confirm/{id}', name: 'app_confirm_commande')]
     public function confirmCommande(Commande $commande, EntityManagerInterface $entityManager): RedirectResponse
     {
-        
+        // Update the status to 'confirmed'
         $commande->setStatus('confirmed');
-        
-
         $entityManager->flush();
-
-        $this->addFlash('success', 'Commande confirmed successfully.');
-
-        
-        return $this->redirectToRoute('list_commandes');
+    
+        // Redirect to the payment checkout page with the command ID
+        return $this->redirectToRoute('checkout', [
+            'id' => $commande->getId(),
+            'stripeSK' => 'sk_test_51OqoS0G1DR5SKi86xYIFdz8d62mBHF1uQNV29VnQUECiSI44HVq1Y15yYmXLyc2jZq4DVZIUaX9gRCSp7DDWFCcL00aDAFVNpO', // Replace with your actual Stripe secret key
+        ]);
     }
-
+    
     
 }

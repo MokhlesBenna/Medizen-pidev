@@ -13,20 +13,25 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Knp\Component\Pager\PaginatorInterface;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Response\QrCodeResponse;
+
+
 #[Route('/medicament')]
 class MedicamentController extends AbstractController
 {
+  
   
     #[Route('/', name: 'app_medicament_index', methods: ['GET'])]
     public function index(Request $request, MedicamentRepository $medicamentRepository, PaginatorInterface $paginator): Response
     {
         $medicaments = $medicamentRepository->findAll();
     
-        // Paginate the results
+       
         $pagination = $paginator->paginate(
-            $medicaments, // Query, not result
-            $request->query->getInt('page', 1), // Page number
-            6 // Limit per page
+            $medicaments, 
+            $request->query->getInt('page', 1), 
+            6
         );
     
         return $this->render('medicament/listmedicament.html.twig', [
@@ -44,46 +49,65 @@ class MedicamentController extends AbstractController
 
     }
     #[Route('/new', name: 'app_medicament_new', methods: ['GET', 'POST'])]
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $medicament = new Medicament();
-    $form = $this->createForm(MedicamentType::class, $medicament);
-    $form->handleRequest($request);
-
-    try {
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Handle file upload
-            $this->handleFileUpload($medicament);
-
-            // Persist the entity
-            $entityManager->persist($medicament);
-
-            // Flush changes to the database
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_medicament_all', [], Response::HTTP_SEE_OTHER);
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $medicament = new Medicament();
+        $form = $this->createForm(MedicamentType::class, $medicament);
+        $form->handleRequest($request);
+    
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Handle file upload
+                $this->handleFileUpload($medicament);
+    
+                // Persist the entity
+                $entityManager->persist($medicament);
+    
+                // Flush changes to the database
+                $entityManager->flush();
+                
+    
+                return $this->redirectToRoute('app_medicament_all', [], Response::HTTP_SEE_OTHER);
+            }
+        } catch (\Exception $e) {
+            // Log the error
+            $this->get('logger')->error('Error creating new Medicament: ' . $e->getMessage());
+    
+            // Optionally, dump the exception for debugging
+            dump($e);
+    
+            // Handle the error (e.g., show a user-friendly message)
+            $this->addFlash('error', 'An error occurred while creating a new Medicament.');
+    
+            return $this->render('medicament/new.html.twig', [
+                'medicament' => $medicament,
+                'form' => $form->createView(),
+            ]);
         }
-    } catch (\Exception $e) {
-        // Log the error
-        $this->get('logger')->error('Error creating new Medicament: ' . $e->getMessage());
-
-        // Optionally, dump the exception for debugging
-        dump($e);
-
-        // Handle the error (e.g., show a user-friendly message)
-        $this->addFlash('error', 'An error occurred while creating a new Medicament.');
-
+    
         return $this->render('medicament/new.html.twig', [
             'medicament' => $medicament,
             'form' => $form->createView(),
         ]);
     }
-
-    return $this->render('medicament/new.html.twig', [
-        'medicament' => $medicament,
-        'form' => $form->createView(),
-    ]);
-}
+    public function generateQrCodeAction(Medicament $medicament)
+    {
+        // Create a QrCode instance
+        $qrCode = new QrCode($medicament->getName());
+    
+        // Set additional options if needed
+        $qrCode->setSize(200);
+    
+        // Generate the QR code as PNG data
+        $qrCodeData = $qrCode();
+    
+        // Create the response with PNG content type
+        $response = new Response($qrCodeData, Response::HTTP_OK, [
+            'Content-Type' => 'image/png'
+        ]);
+    
+        return $response;
+    }
 
 private function handleFileUpload(Medicament $medicament): void
 {
@@ -97,7 +121,7 @@ private function handleFileUpload(Medicament $medicament): void
         // Move the file to the directory where images are stored
         try {
             $imageFile->move(
-                $this->getParameter('medicament_images_directory'), // Configure this path in your services.yaml
+                $this->getParameter('medicament_images_directory'), // Configured in services.yaml
                 $fileName
             );
         } catch (FileException $e) {
@@ -186,15 +210,14 @@ public function medicamentDetails(int $id, MedicamentRepository $medicamentRepos
 
 private function getChatbotMessages(Medicament $medicament): array
 {
-    // Example: Implement chatbot logic based on the medicament details
-    // You can generate chatbot messages dynamically based on the medicament information
-    // For simplicity, this example returns a predefined set of messages
+    
     return [
         'Hello! How can I assist you with the medicament ' . $medicament->getName() . '?',
-        'Do you have any specific questions about this medicament?',
-        // Add more messages as needed
+        'Do you have any specific questions about this medicament?'. $medicament->getName() . '?',
+
     ];
 }
+
     #[Route('/sell/{id}/{quantity}', name: 'sell_medicament')]
     public function sellMedicament(
         int $id,
@@ -239,8 +262,9 @@ private function getChatbotMessages(Medicament $medicament): array
             $entityManager->flush();
     
             // Render the confirmation template
-            return $this->render('commande/confirm_commande.html.twig', [
-                'commande' => $commande,
+            return $this->redirectToRoute('checkout', [
+                'id' => $medicament->getId(),
+                'stripeSK' => 'sk_test_51OqoS0G1DR5SKi86xYIFdz8d62mBHF1uQNV29VnQUECiSI44HVq1Y15yYmXLyc2jZq4DVZIUaX9gRCSp7DDWFCcL00aDAFVNpO', // Replace with your actual Stripe secret key
             ]);
         } else {
             $this->addFlash('danger', 'Not enough quantity available.');
