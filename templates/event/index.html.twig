@@ -1,0 +1,152 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Event index
+{% endblock %}
+
+
+{% block body %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+	<div class="card-body pb-0">
+		<h5 class="card-title">Evenements
+			<span>| MediZen</span>
+		</h5>
+		<div class="card-body">
+			<h5 class="card-title"></h5>
+			<div class="row">
+				<div class="col">
+					<input type="text" value="" class="form-control" placeholder="Recherche de Nom" id="searchNom">
+				</div>
+				<div class="col">
+					<input type="text" value="" class="form-control" placeholder="Recherche delieu" id="searchlieu">
+				</div>
+
+				<div class="col">
+					<input type="text" value="" class="form-control" placeholder="Recherche description" id="searchdescription">
+				</div>
+			</div>
+		</div>
+		<table class="table table-borderless" id="dataTable">
+			<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Titre</th>
+					<th scope="col">DateDebut</th>
+					<th scope="col">DateFin</th>
+					<th scope="col">Lieu</th>
+					<th scope="col">Description</th>
+					<th scope="col">Image</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.titre }}</td>
+						<td>{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.dateFin ? event.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+						<td>{{ event.lieu }}</td>
+						<td>{{ event.description }}</td>
+						<td><img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Event Image" style="max-width: 60px; max-height: 60px;"></td>
+						<td>
+							<a href="{{ path('app_event_delete', {'id': event.id}) }}" class="badge bg-danger">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+							<a href="{{ path('app_event_edit', {'id': event.id}) }}" class="badge bg-warning">
+								<i class="fas fa-edit"></i>
+							</a>
+							<a href="{{ path('app_event_show', {'id': event.id}) }}" class="badge bg-success">
+								<i class=" fas fa-eye"></i>
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="7">no records found</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+</tbody>
+{# Pagination #}
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="text-center">
+			{{ knp_pagination_render(events) }}
+		</div>
+	</div>
+</div>
+<br>
+
+{# style of pagination #}
+<style>
+	.pagination {
+		display: flex;
+		justify-content: center;
+		list-style: none;
+		padding: 0;
+	}
+
+	.pagination li {
+		margin: 0 5px;
+	}
+
+	.button-container {
+		display: flex;
+		flex-direction: row;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+
+	.button-container button {
+		margin-right: 10px; /* Espacement entre les boutons */
+	}
+
+	.pagination a {
+		text-decoration: none;
+		padding: 5px 10px;
+		border: 1px solid #404a3d; /* Bleu */
+		border-radius: 3px;
+		color: #404a3d; /* Bleu */
+	}
+
+	.pagination a:hover {
+		background-color: #404a3d; /* Bleu au survol */
+		color: #fff; /* Texte blanc au survol */
+	}
+</style>
+<div class="text-center">
+	<a href="{{ path('app_event_new') }}" class="btn btn-primary">
+		<i class="fas fa-plus-circle"></i>Ajouter</a>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function () { // Function to perform the search based on the specified column
+function searchColumn(columnIndex, value) {
+$("#dataTable tbody tr").filter(function () {
+var cellText = $(this).find("td").eq(columnIndex).text().toLowerCase();
+var found = cellText.indexOf(value) > -1;
+$(this).toggle(found);
+});
+}
+
+// Event handlers for each input element
+$("#searchNom").on("keyup", function () {
+searchColumn(1, $(this).val().toLowerCase());
+});
+
+$("#searchlieu").on("keyup", function () {
+searchColumn(4, $(this).val().toLowerCase());
+});
+
+
+$("#searchdescription").on("keyup", function () {
+searchColumn(5, $(this).val().toLowerCase());
+});
+});
+</script>{% endblock %}

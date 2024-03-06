@@ -1,0 +1,52 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Sponseur
+{% endblock %}
+
+{% block body %}
+	<h1>Sponseur</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ sponseur.id }}</td>
+			</tr>
+			<tr>
+				<th>Nom</th>
+				<td>{{ sponseur.nom }}</td>
+			</tr>
+			<tr>
+				<th>Email</th>
+				<td>{{ sponseur.email }}</td>
+			</tr>
+			<tr>
+				<th>Numero</th>
+				<td>{{ sponseur.numero }}</td>
+			</tr>
+			<tr>
+				<th>Logo</th>
+				<td>{{ sponseur.logo }}
+					<img src="{{ sponseur.logo }}" class="card-img-top" alt="Image" style="max-width: 100%; max-height: 200px;"></td>
+			</tr>
+			<tr>
+				<th>Pack</th>
+				<td>{{ sponseur.pack }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_sponseur_index', {'id': sponseur.id}) }}" class="badge bg-success">
+		<i class="fas fa-leaf">Liste</i>
+	</a>
+
+	
+	<br>
+
+	<a href="{{ path('app_sponseur_edit', {'id': sponseur.id}) }}" class="badge bg-warning">
+		<i class="fas fa-edit"></i>Modifier
+	</a>
+
+
+	{{ include('sponseur/_delete_form.html.twig') }}
+{% endblock %}

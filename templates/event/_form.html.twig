@@ -1,0 +1,58 @@
+{{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+<label for="inputText" class="col-sm-4 col-form-label">Titre</label>
+<div class="col-sm-10">
+	{{ form_widget(form.titre,{'attr':{'class':'form-control','placeholder': 'Nom'}}) }}
+
+</div>
+{{ form_errors(form.titre,{'attr':{'class':'text-danger'}}) }}
+
+<label for="inputText" class="col-sm-4 col-form-label">Date Début</label>
+<div class="col-sm-10">
+	{{ form_widget(form.dateDebut,{'attr':{'class':'form-control','placeholder': 'Nom'}}) }}
+
+</div>
+{{ form_errors(form.dateDebut,{'attr':{'class':'text-danger'}}) }}
+
+
+<label for="inputText" class="col-sm-4 col-form-label">Date Fin </label>
+<div class="col-sm-10">
+	{{ form_widget(form.dateFin,{'attr':{'class':'form-control','placeholder': 'Nom'}}) }}
+
+</div>
+{{ form_errors(form.dateFin,{'attr':{'class':'text-danger'}}) }}
+
+
+
+<label for="inputText" class="col-sm-4 col-form-label">Lieu</label>
+<div class="col-sm-20">
+	{{ form_widget(form.lieu,{'attr': {'class': 'form-control', 'placeholder': 'nom.prenom@gmail.com'}}) }}
+
+</div>
+{{ form_errors(form.lieu,{'attr':{'class':'text-danger'}}) }}
+
+<label for="inputText" class="col-sm-4 col-form-label">Description</label>
+<div class="col-sm-10">
+	{{ form_widget(form.description,{'attr':{'class':'form-control','placeholder': 'Numéro'}}) }}
+</div>
+{{ form_errors(form.description,{'attr':{'class':'text-danger'}}) }}
+
+<label for="inputText" class="col-sm-4 col-form-label">Image</label>
+<div class="col-sm-10">
+	{{ form_widget(form.image,{'attr':{'class':'form-control','placeholder': 'inserer une image'}}) }}
+</div>
+{{ form_errors(form.image,{'attr':{'class':'text-danger'}}) }}
+
+
+
+<br>
+
+
+
+
+<div class="col-10 col-sm-4">
+		<button class="btn btn-primary w-30 py-2">{{ button_label|default('Save') }}</button>
+	</div>
+
+<br>
+
+{{ form_end(form) }}

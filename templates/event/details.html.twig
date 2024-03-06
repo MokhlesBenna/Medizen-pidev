@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+	<div class="container-fluid header bg-primary p-0 mb-5">
+		<div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+			<div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s">
+				<h1 class="display-4 text-white mb-5">{{ event.titre }}</h1>
+				<div class="row g-4">
+					<div class="col-sm-4">
+						<div class="border-start border-light ps-4">
+							<h2 class="text-white mb-1" data-toggle="counter-up"></h2>
+							<p class="text-light mb-0">{{ event.description }}</p>
+						</div>
+					</div>
+					<div class="d-flex justify-content-between align-items-center">
+						<h4 class="card-text">Date:
+							{{ event.dateDebut ? event.dateDebut|date('Y-m-d H:i:s') : '' }}</h3>
+						<br>
+						<br>
+						<h4 class="card-text">Lieu:{{ event.lieu }}</h3>
+						<br>
+					</div>
+					<br>
+
+
+					<div class="col-sm-4">
+						<form id="participationForm" action="{{ path('participer_event', {'id': event.id}) }}" method="post">
+							<button type="submit" class="btn btn-primary">Participer</button>
+						</form>
+
+						<div id="notification" class="alert alert-success" style="display: none;">
+							Vous avez participé à l'événement avec succès!
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+				<div class="">
+					<div class="">
+						<img src="{{ asset('uploads/events/' ~ event.image) }}" class="img-fluid" style="width: 100%; height: auto; border: 4px solid #ddd; border-radius: 8px;">
+						<div
+							class="owl-carousel-text"><!-- Your content here -->
+						</div>
+
+						<h1 class="display-1 text-white mb-0"></h1>
+					</div>
+					<br>
+					<br>
+					<ul class="list-inline text-end">
+						{% for sponseur in event.getSponsorList() %}
+							<li class="list-inline-item me-3">
+								<img src="{{ asset('uploads/sponseurs/' ~ sponseur.logo) }}" alt="{{ sponseur.nom }} Logo" class="img-fluid" style="max-height: 100px;">
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+
+			</div>
+		</div>
+
+	</div>
+	<script>
+		document.getElementById('participationForm').addEventListener('submit', function (event) {
+event.preventDefault();
+
+setTimeout(function () {
+document.getElementById('notification').style.display = 'block';
+}, 1000);
+});
+	<script>
+  const participateButton = document.getElementById('participateButton');
+
+  participateButton.addEventListener('click', async () => {
+    try {
+      const eventId = {{ event.id }}; // Replace with your way of getting the event ID from the template
+
+      const response = await fetch(`/participer/${eventId}`, {
+        method: 'POST',
+        // Add CSRF token here if required by your backend
+        // headers: {
+        //   'X-CSRF-TOKEN': '{{ csrf_token('participer_event') }}' // Replace with your token generation method
+        // }
+      });
+
+      if (!response.ok) {
+        throw new Error('Participation failed');
+      }
+
+      const data = await response.json();
+      if (data.success) {
+        // Show success message
+        document.getElementById('notification').style.display = 'block';
+      } else {
+        // Handle error message (if returned from the backend)
+        document.getElementById('error-message').textContent = data.error;
+        document.getElementById('error-message').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Display a generic error message or handle appropriately
+      document.getElementById('error-message').textContent = 'Une erreur est survenue. Veuillez réessayer.';
+      document.getElementById('error-message').style.display = 'block';
+    }
+  });
+</script>
+
+
+</div>{% endblock %}
