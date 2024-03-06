@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 
 #[Route('/reservation')]
@@ -20,41 +22,58 @@ class ReservationController extends AbstractController
 {
 
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository, Request $request,PaginatorInterface $paginator): Response
-    {
-        $query = $reservationRepository->createQueryBuilder('r')->getQuery();
-
-    $pagination=$reservationRepository->findAll();
-    $pagination = $paginator->paginate(
-        $query,
-        $request->query->getInt('page', 1), 
-        2 
-    );
-
-    
-    return $this->render('reservation/index.html.twig', [
-        'reservations' => $pagination,
-    ]);
-        
-    }
-    #[Route('/admin', name: 'app_reservation_admin', methods: ['GET'])]
-public function listeReservations(Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
+    public function StatusFilterationPagination(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
 {
-    
-    $reservations = $reservationRepository->findAll();
+    // Récupérer le statut à partir de la requête
+    $status = $request->query->get('status');
 
-    
+    // Récupérer les réservations en fonction du statut
+    if ($status) {
+        $reservations = $reservationRepository->findBy(['status' => $status]);
+    } else {
+        $reservations = $reservationRepository->findAll();
+    }
+
+    // Paginer les réservations
     $pagination = $paginator->paginate(
         $reservations,
-        $request->query->getInt('page', 1),
-        10 
+        $request->query->getInt('page', 1), // Récupérer le numéro de page à partir de la requête
+        3 // Nombre d'éléments par page
     );
 
+   
+
     
-    return $this->render('reservation/admin.html.twig', [
+
+    // Renvoyer la réponse avec la vue et les données paginées
+    return $this->render('reservation/index.html.twig', [
         'reservations' => $pagination,
+        'status' => $status,
     ]);
 }
+    
+    #[Route('/admin', name: 'app_reservation_admin', methods: ['GET'])]
+    public function listeReservations(Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
+    {
+        $status = $request->query->get('status');
+    
+        $reservations = $reservationRepository->findByStatus($status);
+    
+        if (!$status) {
+            $reservations = $reservationRepository->findAll();
+        }
+    
+        $pagination = $paginator->paginate(
+            $reservations,
+            $request->query->getInt('page', 1),
+            1
+        );
+    
+        return $this->render('reservation/admin.html.twig', [
+            'reservations' => $pagination,
+            'status' => $status,
+        ]);
+    }
         
     
 
@@ -93,13 +112,12 @@ public function listeReservations(Request $request, PaginatorInterface $paginato
         $reservationDate = $form->get('reservation_date')->getData();
         $heure = $reservationDate->format('H');
 
-        // Vérifie si l'heure de réservation est entre 9h et 17h
+       
         if ($heure < 9 || $heure > 17) {
             $this->addFlash('error', 'L\'heure de réservation doit être comprise entre 9h et 17h.');
             return $this->redirectToRoute('app_reservation_new');
         }
 
-        // Si la date de réservation est dans le futur
         if ($reservation->setReservationDate($reservationDate)) {
             $entityManager->persist($reservation);
             $entityManager->flush();
@@ -177,6 +195,27 @@ public function pagination(Request $request, ReservationRepository $repository )
         'reservations' => $repository->findAll(),
         'paginator' => $paginator,
     ]);
+}
+
+#[Route('/reservation/search-ajax', name: 'reservation_search_ajax', methods: ['GET'])]
+public function searchAjax(Request $request, ReservationRepository $reservationRepository): JsonResponse
+{
+    $searchQuery = $request->query->get('search');
+
+    $reservations = $reservationRepository->searchByName($searchQuery);
+
+    // Vous pouvez formater les données comme vous le souhaitez avant de les renvoyer
+    $formattedResults = [];
+
+    foreach ($reservations as $reservation) {
+        $formattedResults[] = [
+            'id' => $reservation->getId(),
+            'name' => $reservation->getName(),
+            // Ajoutez d'autres champs si nécessaire
+        ];
+    }
+
+    return new JsonResponse($formattedResults);
 }
 
 }

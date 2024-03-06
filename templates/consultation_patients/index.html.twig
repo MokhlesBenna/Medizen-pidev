@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container py-5">
-    <h1 class="display-4 text-center mb-5">Liste des docteurs</h1>
+    <h1 class="display-4 text-center mb-5">Listes des consultations</h1>
 
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -26,11 +26,11 @@
                            
                             <td>
                                 <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="{{ path('app_docteur_show', {'id': docteur.id}) }}" class="btn btn-sm btn-primary">Voir</a>
-                                    <a href="{{ path('app_docteur_edit', {'id': docteur.id}) }}" class="btn btn-sm btn-info">Modifier</a>
-                                    <form action="{{ path('app_docteur_delete', {'id': docteur.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce docteur?');">
+                                    <a href="{{ path('app_consultation_patient_show', {'id': consultation_patient.id}) }}" class="btn btn-sm btn-primary">Voir</a>
+                                    <a href="{{ path('app_consultation_patient_edit', {'id': consultation_patient.id}) }}" class="btn btn-sm btn-info">Modifier</a>
+                                    <form action="{{ path('app_consultation_patient_delete', {'id': consultation_patient.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation?');">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ docteur.id) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation_patient.id) }}">
                                         <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
                                     </form>
                                 </div>
@@ -52,6 +52,6 @@
 </div>
 
 <div class="container text-center my-4">
-    <a href="{{ path('app_docteur_new') }}" class="btn btn-primary">Ajouter un nouveau docteur</a>
+    <a href="{{ path('app_consultation_patients_new') }}" class="btn btn-primary">Ajouter une nouvelle consultation</a>
 </div>
 {% endblock %}

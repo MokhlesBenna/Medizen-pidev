@@ -5,6 +5,40 @@
 <div class="container py-5">
     <h1 class="display-4 text-center mb-5">Liste des Réservations</h1>
 
+   
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <form action="{{ path('app_reservation_index') }}" method="get" class="form-inline">
+                <div class="form-group">
+                    
+
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+                <input type="text" class="form-control" placeholder="Recherche" id="rech">
+                <br>
+                <script>
+        function filterTable() {
+            const filter = document.getElementById('rech').value.toUpperCase();
+            const rows = document.querySelectorAll('table tr');
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i].querySelectorAll('td');
+                let visible = false;
+                for (let j = 0; j < cols.length; j++) {
+                    const cell = cols[j];
+                    if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
+                        visible = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = visible ? '' : 'none';
+            }
+        }
+        document.getElementById('rech').addEventListener('keyup', filterTable);
+    </script>
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="table-responsive">
@@ -44,13 +78,28 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                
                 <div class="d-flex justify-content-center my-4">
                     {{ knp_pagination_render(reservations) }}
                 </div>
             </div>
         </div>
     </div>
+
+   
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <div class="btn-group w-100" role="group" aria-label="Filtrer par statut">
+                <a href="{{ path('app_reservation_index') }}" class="btn btn-outline-secondary {% if not status %}active{% endif %}">Toutes</a>
+                <a href="{{ path('app_reservation_index', {'status': 'Pending'}) }}" class="btn btn-outline-primary {% if status == 'Pending' %}active{% endif %}">En attente</a>
+                <a href="{{ path('app_reservation_index', {'status': 'Accepted'}) }}" class="btn btn-outline-success {% if status == 'Accepted' %}active{% endif %}">Acceptées</a>
+                <a href="{{ path('app_reservation_index', {'status': 'Rejected'}) }}" class="btn btn-outline-danger {% if status == 'Rejected' %}active{% endif %}">Rejetées</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 <div class="container text-center my-4">
     <a href="{{ path('app_reservation_new') }}" class="btn btn-primary">Réserver Maintenant!</a>

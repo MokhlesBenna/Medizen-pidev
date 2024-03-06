@@ -21,6 +21,27 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+    public function findByDate($date)
+{
+    return $this->createQueryBuilder('r')
+        ->andWhere('r.reservation_date = :date')
+        ->setParameter('date', $date)
+        ->getQuery()
+        ->getResult();
+
+    }
+
+
+    public function searchByName(string $name): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Reservation[] Returns an array of Reservation objects
 //     */
