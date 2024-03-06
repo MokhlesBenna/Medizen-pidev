@@ -2,56 +2,69 @@
 
 {% block body %}
 <div class="container py-5">
-    <h1 class="display-4 text-center mb-5">Listes des consultations</h1>
+    <h1 class="display-4 text-center mb-5">Liste des Consultations</h1>
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Prénom</th>
-                            <th scope="col">Date du rendez-vous</th>
-                            <th scope="col">Remaraques des docteurs</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for consultation_patient in consultation_patients %}
-                        <tr>
-                            <td>{{ consultation_patient.name }}</td>
-                            <td>{{ consultation_patient.surname }}</td>
-                            <td>{{ consultation_patient.Remaraques }}</td>
-                            <td>{{ consultation_patient.experience }}</td>
-                           
-                            <td>
-                                <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="{{ path('app_consultation_patient_show', {'id': consultation_patient.id}) }}" class="btn btn-sm btn-primary">Voir</a>
-                                    <a href="{{ path('app_consultation_patient_edit', {'id': consultation_patient.id}) }}" class="btn btn-sm btn-info">Modifier</a>
-                                    <form action="{{ path('app_consultation_patient_delete', {'id': consultation_patient.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation?');">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation_patient.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                         <div class="d-flex justify-content-center my-4">
-                    {{ knp_pagination_render(docteurs) }}
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <form action="{{ path('app_consultation_patients_index') }}" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control text-center" placeholder="Recherche" id="rech">
+                    
                 </div>
-                        {% else %}
-                        <tr>
-                            <td colspan="7">Aucun enregistrement trouvé</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            </form>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for consultation_patient in consultation_patients %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ consultation_patient.name }} {{ consultation_patient.surname }}</h5>
+                    <p class="card-text">Date du rendez-vous: {{ consultation_patient.reservation_date|date('d/m/Y H:i') }}</p>
+                    <p class="card-text">Remarques des docteurs: {{ consultation_patient.RemarquesDesDocteurs }}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ path('app_consultation_patients_show', {'id': consultation_patient.id}) }}" class="btn btn-primary me-md-2">Voir</a>
+                        <a href="{{ path('app_consultation_patients_edit', {'id': consultation_patient.id}) }}" class="btn btn-info me-md-2">Modifier</a>
+                        <form action="{{ path('app_consultation_patients_delete', {'id': consultation_patient.id}) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consultation?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ consultation_patient.id) }}">
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+        </div>
+        {% else %}
+        <div class="col">
+            <p class="text-center">Aucun enregistrement trouvé.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 text-center">
+            <a href="{{ path('app_consultation_patients_new') }}" class="btn btn-primary">Ajouter une nouvelle consultation</a>
         </div>
     </div>
 </div>
 
-<div class="container text-center my-4">
-    <a href="{{ path('app_consultation_patients_new') }}" class="btn btn-primary">Ajouter une nouvelle consultation</a>
-</div>
+<script>
+    function filterConsultations() {
+        const filter = document.getElementById('rech').value.toUpperCase();
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const name = card.querySelector('.card-title').innerText.toUpperCase();
+            if (name.includes(filter)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    document.getElementById('rech').addEventListener('keyup', filterConsultations);
+</script>
+
 {% endblock %}

@@ -21,61 +21,70 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ReservationController extends AbstractController
 {
 
-    #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
-    public function StatusFilterationPagination(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
+    #[Route('/calendar', name: 'app_reservation_calendar')]
+    public function calendar(): Response
 {
-    // Récupérer le statut à partir de la requête
-    $status = $request->query->get('status');
+    return $this->render('reservation/calendar.html.twig');
+}
 
-    // Récupérer les réservations en fonction du statut
+
+#[Route('/', name: 'app_reservation_index', methods: ['GET'])]
+public function StatusFilterationPagination(ReservationRepository $reservationRepository, Request $request, PaginatorInterface $paginator): Response
+{
+    $status = $request->query->get('status');
+    
     if ($status) {
         $reservations = $reservationRepository->findBy(['status' => $status]);
     } else {
         $reservations = $reservationRepository->findAll();
     }
 
-    // Paginer les réservations
     $pagination = $paginator->paginate(
         $reservations,
-        $request->query->getInt('page', 1), // Récupérer le numéro de page à partir de la requête
-        3 // Nombre d'éléments par page
+        $request->query->getInt('page', 1), 
+        2 
     );
 
-   
-
-    
-
-    // Renvoyer la réponse avec la vue et les données paginées
     return $this->render('reservation/index.html.twig', [
         'reservations' => $pagination,
         'status' => $status,
     ]);
-}
+} 
+
     
     #[Route('/admin', name: 'app_reservation_admin', methods: ['GET'])]
     public function listeReservations(Request $request, PaginatorInterface $paginator, ReservationRepository $reservationRepository): Response
     {
         $status = $request->query->get('status');
+
     
-        $reservations = $reservationRepository->findByStatus($status);
+    if ($status) {
+        $reservations = $reservationRepository->findBy(['status' => $status]);
+    } else {
+        $reservations = $reservationRepository->findAll();
+    }
+
     
-        if (!$status) {
-            $reservations = $reservationRepository->findAll();
-        }
-    
-        $pagination = $paginator->paginate(
-            $reservations,
-            $request->query->getInt('page', 1),
-            1
-        );
-    
-        return $this->render('reservation/admin.html.twig', [
-            'reservations' => $pagination,
-            'status' => $status,
-        ]);
+    $pagination = $paginator->paginate(
+        $reservations,
+        $request->query->getInt('page', 1), 
+        2 
+    );
+
+   
+    return $this->render('reservation/admin.html.twig', [
+        'reservations' => $pagination,
+        'status' => $status,
+    ]);
     }
         
-    
+    #[Route('show/admin/{id}', name: 'app_reservation_show')]
+    public function showAdmin(Reservation $reservation): Response
+    {
+        return $this->render('reservation/show.html.twig', [
+            'reservation' => $reservation,
+        ]);
+}
 
     #[Route('/admin/reject/{id}', name: 'reject_reservation', methods: ['POST'])]
     public function rejectReservation(Reservation $reservation, EntityManagerInterface $entityManager): Response

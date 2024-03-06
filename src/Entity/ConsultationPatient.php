@@ -22,7 +22,7 @@ class ConsultationPatient
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     public ?Reservation $reservation_date = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', nullable: true)] // Modification ici
     private ?string $RemarquesDesDocteurs = null;
 
     public function getId(): ?int
@@ -54,12 +54,12 @@ class ConsultationPatient
         return $this;
     }
 
-    public function getReservationDate(): ?reservation
+    public function getReservationDate(): ?Reservation
     {
         return $this->reservation_date;
     }
 
-    public function setReservationDate(?reservation $reservation_date): static
+    public function setReservationDate(?Reservation $reservation_date): static
     {
         $this->reservation_date = $reservation_date;
 
@@ -77,6 +77,4 @@ class ConsultationPatient
 
         return $this;
     }
-
-    
 }

@@ -1,13 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit ConsultationPatient{% endblock %}
-
 {% block body %}
-    <h1>Edit ConsultationPatient</h1>
-
-    {{ include('consultation_patients/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_consultation_patients_index') }}">back to list</a>
-
-    {{ include('consultation_patients/_delete_form.html.twig') }}
+<div class="container py-5">
+    <h1 class="display-4 text-center mb-5">Modifier la Consultation</h1>
+    <form action="{{ path('app_consultation_patients_edit', {'id': consultation_patient.id}) }}" method="post">
+        {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.surname) }}
+            {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.reservation_date) }}
+            {{ form_widget(form.reservation_date, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.remarquesDesDocteurs) }}
+            {{ form_widget(form.remarquesDesDocteurs, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+        </div>
+        <div class="text-center"> 
+            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        </div>
+        {{ form_end(form) }}
+    </form>
+</div>
 {% endblock %}

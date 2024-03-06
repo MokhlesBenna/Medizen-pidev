@@ -1,50 +1,103 @@
 {% extends 'baseBack.html.twig' %}
 
+
 {% block body %}
-<div class="container">
-    <h1>Liste des Réservations pour vous</h1>
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Téléphone</th>
-                <th scope="col">Date de Réservation</th>
-                <th scope="col" class="text-middle">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reservation in reservations %}
-                {% if reservation.status == "pending" %}
-                    <tr>
-                        <td>{{ reservation.name }}</td>
-                        <td>{{ reservation.surname }}</td>
-                        <td>{{ reservation.mobile }}</td>
-                        <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
-                        <td class="text-center align-middle">
-                            <div class="d-inline-block mx-2">
-                                <form action="{{ path('reject_reservation', {'id': reservation.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir rejeter cette réservation?');">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
-                                    <button type="submit" class="btn btn-sm btn-danger">Rejeter la Réservation</button>
-                                </form>
-                            </div>
-                            <div class="d-inline-block mx-2">
-                                <form action="{{ path('accept_reservation', {'id': reservation.id}) }}" method="post">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ reservation.id) }}">
-                                    <button type="submit" class="btn btn-sm btn-primary">Confirmer la Réservation</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            {% if reservations is empty %}
-                <tr>
-                    <td colspan="5">Aucune réservation en attente</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+
+<div class="container py-5">
+    <h1 class="display-4 text-center mb-5">Liste des Réservations</h1>
+
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Recherche" id="rech">
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Téléphone</th>
+                            <th scope="col">Date de Réservation</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.name }}</td>
+                            <td>{{ reservation.surname }}</td>
+                            <td>{{ reservation.mobile }}</td>
+                            <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
+                            <td style="color: {% if reservation.status == 'pending' %}orange{% elseif reservation.status == 'Accepted' %}green{% else %}red{% endif %};">{{ reservation.status }}</td>
+                            <td>
+                                <a href="{{ path('app_reservation_showAdmin', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                                
+                                {% if reservation.status == 'pending' %}
+                                    <form action="{{ path('reject_reservation', {'id': reservation.id}) }}" method="post" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir rejeter cette réservation?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Rejeter</button>
+                                    </form>
+                                    <form action="{{ path('accept_reservation', {'id': reservation.id}) }}" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('accept' ~ reservation.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-success">Accepter</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">Aucun enregistrement trouvé</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="d-flex justify-content-center my-4">
+                    {{ knp_pagination_render(reservations) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-6">
+            <div class="btn-group w-100" role="group" aria-label="Filtrer par statut">
+                <a href="{{ path('app_reservation_admin') }}" class="btn btn-outline-secondary {% if not status %}active{% endif %}">Toutes</a>
+                <a href="{{ path('app_reservation_admin', {'status': 'Pending'}) }}" class="btn btn-outline-primary {% if status == 'Pending' %}active{% endif %}">En attente</a>
+                <a href="{{ path('app_reservation_admin', {'status': 'Accepted'}) }}" class="btn btn-outline-success {% if status == 'Accepted' %}active{% endif %}">Acceptées</a>
+                <a href="{{ path('app_reservation_admin', {'status': 'Rejected'}) }}" class="btn btn-outline-danger {% if status == 'Rejected' %}active{% endif %}">Rejetées</a>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+<script>
+    function filterTable() {
+        const filter = document.getElementById('rech').value.toUpperCase();
+        const rows = document.querySelectorAll('table tr');
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i].querySelectorAll('td');
+            let visible = false;
+            for (let j = 0; j < cols.length; j++) {
+                const cell = cols[j];
+                if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
+                    visible = true;
+                    break;
+                }
+            }
+            rows[i].style.display = visible ? '' : 'none';
+        }
+    }
+    document.getElementById('rech').addEventListener('keyup', filterTable);
+</script>
+
 {% endblock %}
+

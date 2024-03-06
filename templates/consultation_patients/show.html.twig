@@ -1,30 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ConsultationPatient{% endblock %}
-
 {% block body %}
-    <h1>ConsultationPatient</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ consultation_patient.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ consultation_patient.name }}</td>
-            </tr>
-            <tr>
-                <th>Surname</th>
-                <td>{{ consultation_patient.surname }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_consultation_patients_index') }}">back to list</a>
-
-    <a href="{{ path('app_consultation_patients_edit', {'id': consultation_patient.id}) }}">edit</a>
-
-    {{ include('consultation_patients/_delete_form.html.twig') }}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">Détails de la Consultation</h1>
+                    <div class="mb-3">
+                        <h5>Nom: {{ consultation_patient.name }}</h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Prénom: {{ consultation_patient.surname }}</h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Date du rendez-vous: {{ consultation_patient.reservation_date|date('d/m/Y H:i') }}</h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Remarques des docteurs:</h5>
+                        <p>{{ consultation_patient.RemarquesDesDocteurs }}</p>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{{ path('app_consultation_patients_index') }}" class="btn btn-secondary">Retour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
