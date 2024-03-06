@@ -1,0 +1,30 @@
+
+
+<h1>Liste des Commandes</h1>
+
+{% if commandes|length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Total Price</th>
+                <th>Quantity Ordered</th>
+                <th>Date Ordered</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.id }}</td>
+                    <td>{{ commande.totalprice }}</td>
+                    <td>{{ commande.quantityOrdered }}</td>
+                    <td>{{ commande.dateOrdered ? commande.dateOrdered|date('Y-m-d') : 'N/A' }}</td>
+                    <td>{{ commande.status }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucun enregistrement trouvé.</p>
+{% endif %}

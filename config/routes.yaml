@@ -7,3 +7,6 @@ generate_qr_code:
     methods: ['GET']
     requirements:
         id: '\d+'
+pdf_export:
+   resource: ../src/Controller/PdfController.php
+   type: annotation

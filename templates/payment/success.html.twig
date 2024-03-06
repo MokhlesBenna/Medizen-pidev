@@ -6,14 +6,17 @@
 
     {{ parent() }}
 
-    <h1>Thanks for your order!</h1>
-    <p>
-        We appreciate your business!
-        If you have any questions, please email
-        <a href="mailto:orders@example.com">MediZen@esprit.com</a>.
-    </p>
+    <div class="container mt-5 text-center">
+        <img src="{{ asset('img/success-icon.png') }}" alt="Success Icon" class="img-fluid mb-4" style="width: 100px;">
+        <h1 class="text-success">Payment Successful!</h1>
+        <p class="lead">
+            Thank you for your order! Your payment was successful.
+            We appreciate your business.
+        </p>
 
-<div>
+        <div class="mt-4">
+            <p>If you have any questions, please contact us at <a href="mailto:orders@example.com">MediZen@esprit.com</a>.</p>
+        </div>
+    </div>
 
-</div>
 {% endblock %}
