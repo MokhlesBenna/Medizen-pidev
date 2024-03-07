@@ -9,7 +9,6 @@
             <form action="{{ path('app_consultation_patients_index') }}" method="get">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control text-center" placeholder="Recherche" id="rech">
-                    
                 </div>
             </form>
         </div>
@@ -21,7 +20,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">{{ consultation_patient.name }} {{ consultation_patient.surname }}</h5>
-                    <p class="card-text">Date du rendez-vous: {{ consultation_patient.reservation_date|date('d/m/Y H:i') }}</p>
+                    
                     <p class="card-text">Remarques des docteurs: {{ consultation_patient.RemarquesDesDocteurs }}</p>
                 </div>
                 <div class="card-footer">
@@ -37,10 +36,6 @@
                 </div>
             </div>
         </div>
-        {% else %}
-        <div class="col">
-            <p class="text-center">Aucun enregistrement trouvé.</p>
-        </div>
         {% endfor %}
     </div>
 
@@ -48,6 +43,10 @@
         <div class="col-md-6 text-center">
             <a href="{{ path('app_consultation_patients_new') }}" class="btn btn-primary">Ajouter une nouvelle consultation</a>
         </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(consultation_patients) }}
     </div>
 </div>
 
@@ -66,5 +65,7 @@
     }
     document.getElementById('rech').addEventListener('keyup', filterConsultations);
 </script>
+
+
 
 {% endblock %}

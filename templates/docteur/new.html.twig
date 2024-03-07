@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Add New Doctor{% endblock %}
+{% block title %}Ajouter un nouveau médecin{% endblock %}
 
 {% block body %}
     <div class="container-xxl py-5">
@@ -50,6 +50,9 @@
                         </div>
                         <div class="mb-3">
                             {{ form_row(form.addresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.specialite, {'attr': {'class': 'form-control', 'placeholder': 'Spécialité'}}) }}
                         </div>
                     </div>
                     <div class="text-center"> 

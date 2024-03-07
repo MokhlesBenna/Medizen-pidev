@@ -6,6 +6,8 @@ use App\Entity\ConsultationPatient;
 use App\Form\ConsultationPatientType;
 use App\Repository\ConsultationPatientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,33 +18,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ConsultationPatientsController extends AbstractController
 {
     #[Route('/', name: 'app_consultation_patients_index', methods: ['GET'])]
-    public function index(ConsultationPatientRepository $consultationPatientRepository): Response
-    {
-        $consultationPatients = $consultationPatientRepository->findAll();
+    public function index(ConsultationPatientRepository $consultationPatientRepository, Request $request, PaginatorInterface $paginator): Response
+{
+    $query = $consultationPatientRepository->createQueryBuilder('c')->getQuery();
 
-        return $this->render('consultation_patients/index.html.twig', [
-            'consultation_patients' => $consultationPatients,
-        ]);
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1), 2
+    );
+
+    return $this->render('consultation_patients/index.html.twig', [
+        'consultation_patients' => $pagination,
+    ]);
+}
+#[Route('/new', name: 'app_consultation_patients_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $consultationPatient = new ConsultationPatient();
+    $form = $this->createForm(ConsultationPatientType::class, $consultationPatient);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($consultationPatient);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_consultation_patients_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/new', name: 'app_consultation_patients_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $consultationPatient = new ConsultationPatient();
-        $form = $this->createForm(ConsultationPatientType::class, $consultationPatient);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($consultationPatient);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_consultation_patients_index');
-        }
-
-        return $this->renderForm('consultation_patients/new.html.twig', [
-            'form' => $form,
-        ]);
-    }
+    return $this->render('consultation_patients/new.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
 
     #[Route('/{id}', name: 'app_consultation_patients_show', methods: ['GET'])]
     public function show(ConsultationPatient $consultationPatient): Response

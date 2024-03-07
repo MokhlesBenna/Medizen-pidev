@@ -14,18 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-
+use App\Service\TwilioService;
+use SebastianBergmann\Environment\Console;
+use Psr\Log\LoggerInterface;
 
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
-
-    #[Route('/calendar', name: 'app_reservation_calendar')]
-    public function calendar(): Response
-{
-    return $this->render('reservation/calendar.html.twig');
-}
 
 
 #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
@@ -49,7 +44,28 @@ public function StatusFilterationPagination(ReservationRepository $reservationRe
         'reservations' => $pagination,
         'status' => $status,
     ]);
-} 
+}
+#[Route('/edit/{id}', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
+public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(ReservationType::class, $reservation);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Form submission handling
+        $entityManager->flush(); // Update the entity
+
+        $this->addFlash('success', 'Reservation updated successfully.');
+        return $this->redirectToRoute('app_reservation_index');
+    }
+
+    return $this->render('reservation/edit.html.twig', [
+        'reservation' => $reservation,
+        'form' => $form->createView(),
+    ]);
+}
+
+ 
 
     
     #[Route('/admin', name: 'app_reservation_admin', methods: ['GET'])]
@@ -106,11 +122,11 @@ public function StatusFilterationPagination(ReservationRepository $reservationRe
         $this->addFlash('success', 'Réservation acceptée!');
         return new RedirectResponse($this->generateUrl('app_reservation_admin'));
     }
-
-   
+    
+    
 
     #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, DocteurRepository $docteurRepository): Response
+public function new(Request $request, EntityManagerInterface $entityManager, DocteurRepository $docteurRepository): Response
 {
     $reservation = new Reservation();
     $form = $this->createForm(ReservationType::class, $reservation);
@@ -121,7 +137,6 @@ public function StatusFilterationPagination(ReservationRepository $reservationRe
         $reservationDate = $form->get('reservation_date')->getData();
         $heure = $reservationDate->format('H');
 
-       
         if ($heure < 9 || $heure > 17) {
             $this->addFlash('error', 'L\'heure de réservation doit être comprise entre 9h et 17h.');
             return $this->redirectToRoute('app_reservation_new');
@@ -130,6 +145,11 @@ public function StatusFilterationPagination(ReservationRepository $reservationRe
         if ($reservation->setReservationDate($reservationDate)) {
             $entityManager->persist($reservation);
             $entityManager->flush();
+
+            $smsController = new \App\Controller\SMSController();
+            $d=$reservation->getReservationDate()->format('Y-m-d');
+            $smsController->index('reservation done with success , name: '.$reservation->getName().' surname :'.$reservation->getSurname().' date réservation: '.$d);
+
             $this->addFlash('success', 'Votre rendez-vous a été réservé avec succès.');
             return $this->redirectToRoute('app_reservation_new');
         } else {
@@ -143,27 +163,6 @@ public function StatusFilterationPagination(ReservationRepository $reservationRe
         'docteurs' => $docteurRepository->findAll(),    
     ]);
 }
-
-    #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
-public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createForm(ReservationType::class, $reservation);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    dump($reservation->getAddress());
-
-    return $this->renderForm('reservation/edit.html.twig', [
-        'reservation' => $reservation,
-        'form' => $form,
-    ]);
-}
-
 
     #[Route('/{id}/delete', name: 'app_reservation_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
@@ -213,18 +212,43 @@ public function searchAjax(Request $request, ReservationRepository $reservationR
 
     $reservations = $reservationRepository->searchByName($searchQuery);
 
-    // Vous pouvez formater les données comme vous le souhaitez avant de les renvoyer
+   
     $formattedResults = [];
 
     foreach ($reservations as $reservation) {
         $formattedResults[] = [
             'id' => $reservation->getId(),
             'name' => $reservation->getName(),
-            // Ajoutez d'autres champs si nécessaire
         ];
     }
 
     return new JsonResponse($formattedResults);
+}
+
+#[Route('/cal', name: 'app_cal', methods: ['GET'])]
+public function cal(ReservationRepository $appointmentRepository)
+{
+    $events = $appointmentRepository->findAll();
+
+    $rdvs = [];
+
+    foreach ($events as $event) {
+        $rdvs[] = [
+            'id' => $event->getId(),
+            'start' => $event->getReservationDate()->format('Y-m-d H:i:s'),
+            'end' => $event->getReservationDate()->format('Y-m-d H:i:s'),
+            'title' => $event->getStatus(),
+        ];
+
+        
+    }
+
+ 
+
+    $data = json_encode($rdvs);
+   
+    echo '<script>console.log(' . json_encode($data) . ');</script>';
+    return $this->render('reservation/showCalendar.html.twig', compact('data'));
 }
 
 }

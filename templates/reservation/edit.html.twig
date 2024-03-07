@@ -1,11 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
 <div class="container py-5">
     <h1 class="mb-4">Modifier la Réservation</h1>
-    <form action="{{ path('app_reservation_edit', {'id': reservation.id}) }}" method="post">
+    <form action="{{ path('app_reservation_edit', {'id': reservation.id}) }}" method="post" novalidate>
         {{ form_start(form) }}
+        {% if form_errors(form)|length > 0 %}
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    {% for error in form_errors(form) %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <tbody>
@@ -42,5 +50,4 @@
         {{ form_end(form) }}
     </form>
 </div>
-
 {% endblock %}

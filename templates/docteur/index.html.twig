@@ -1,61 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<div class="container py-5">
-    <h1 class="display-4 text-center mb-5">Liste des docteurs</h1>
+{% block title %}Liste des Médecins{% endblock %}
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nom</th>
-                            <th scope="col">Prénom</th>
-                            <th scope="col">Mail</th>
-                            <th scope="col">Expérience</th>
-                            <th scope="col">Mobile</th>
-                            <th scope="col">Adresse</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for docteur in docteurs %}
-                        <tr>
-                            <td>{{ docteur.Nom }}</td>
-                            <td>{{ docteur.Prenom }}</td>
-                            <td>{{ docteur.mail }}</td>
-                            <td>{{ docteur.experience }}</td>
-                            <td>{{ docteur.mobile }}</td>
-                            <td>{{ docteur.addresse }}</td>
-                            <td>
-                                <div class="btn-group" role="group" aria-label="Actions">
-                                    <a href="{{ path('app_docteur_show', {'id': docteur.id}) }}" class="btn btn-sm btn-primary">Voir</a>
-                                    <a href="{{ path('app_docteur_edit', {'id': docteur.id}) }}" class="btn btn-sm btn-info">Modifier</a>
-                                    <form action="{{ path('app_docteur_delete', {'id': docteur.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce docteur?');">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ docteur.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                         <div class="d-flex justify-content-center my-4">
-                    {{ knp_pagination_render(docteurs) }}
-                </div>
-                        {% else %}
-                        <tr>
-                            <td colspan="7">Aucun enregistrement trouvé</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+{% block body %}
+    <div class="container">
+        <h1 class="my-5">Liste des Médecins</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Expérience</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Spécialité</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for docteur in docteurs %}
+                    <tr>
+                        <td>{{ docteur.nom }}</td>
+                        <td>{{ docteur.prenom }}</td>
+                        <td>{{ docteur.mail }}</td>
+                        <td>{{ docteur.experience }}</td>
+                        <td>{{ docteur.mobile }}</td>
+                        <td>{{ docteur.addresse }}</td>
+                        <td>{{ docteur.specialite }}</td>
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('app_docteur_show', {'id': docteur.id}) }}" class="btn btn-info">Afficher</a>
+                                <a href="{{ path('app_docteur_edit', {'id': docteur.id}) }}" class="btn btn-primary">Modifier</a>
+                                <form action="{{ path('app_docteur_delete', {'id': docteur.id}) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce médecin ?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ docteur.id) }}">
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center my-4">
+            {{ knp_pagination_render(docteurs) }}
         </div>
     </div>
-</div>
-
-<div class="container text-center my-4">
-    <a href="{{ path('app_docteur_new') }}" class="btn btn-primary">Ajouter un nouveau docteur</a>
-</div>
 {% endblock %}

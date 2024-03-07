@@ -2,6 +2,35 @@
   "dependencies": {
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
-    "@fullcalendar/resource-timeline": "^6.1.11"
-  }
+    "@fullcalendar/list": "^6.1.11",
+    "@fullcalendar/resource-timeline": "^6.1.11",
+    "@fullcalendar/timegrid": "^6.1.11"
+  },
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.0.0",
+    "@hotwired/turbo": "^7.0.1",
+    "@symfony/stimulus-bridge": "^3.2.0",
+    "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets"
+  },
+  "name": "medizen2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rouba21/MediZen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rouba21/MediZen/issues"
+  },
+  "homepage": "https://github.com/Rouba21/MediZen#readme",
+  "description": ""
 }

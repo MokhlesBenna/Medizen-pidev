@@ -16,21 +16,20 @@ use Knp\Component\Pager\PaginatorInterface;
 class DocteurController extends AbstractController
 {
     #[Route('/', name: 'app_docteur_index', methods: ['GET'])]
+public function index(DocteurRepository $docteurRepository, Request $request, PaginatorInterface $paginator): Response
+{
+    $query = $docteurRepository->createQueryBuilder('r')->getQuery();
 
-        public function index(DocteurRepository $docteurRepository, Request $request,PaginatorInterface $paginator): Response
-    {
-        $query = $docteurRepository->createQueryBuilder('r')->getQuery();
-
-    $pagination=$docteurRepository->findAll();
     $pagination = $paginator->paginate(
         $query,
-        $request->query->getInt('page', 1), 
-        2 
+        $request->query->getInt('page', 1),
+        2
     );
-        return $this->render('docteur/index.html.twig', [
-            'docteurs' => $docteurRepository->findAll(),
-        ]);
-    }
+
+    return $this->render('docteur/index.html.twig', [
+        'docteurs' => $pagination,
+    ]);
+}
 
     #[Route('/new', name: 'app_docteur_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

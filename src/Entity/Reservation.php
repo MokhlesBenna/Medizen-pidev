@@ -12,7 +12,8 @@ class Reservation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $id;
+
 
     #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
     #[Assert\Length(max: 255)]
@@ -37,7 +38,15 @@ class Reservation
         message: "Le numéro de téléphone doit être composé de 8 chiffres."
     )]
     private ?int $mobile = null;
+   
+
+
     
+
+    public function __construct()
+        {
+            $this->reservation_date = new \DateTime();
+        }
 
     #[ORM\Column(type: 'date')]
 #[Assert\NotBlank(message: "Veuillez choisir une date valide!.")]
@@ -45,17 +54,13 @@ class Reservation
 private ?\DateTime $reservation_date = null;
     
 
-        public function setReservationDate(\DateTime $reservation_date): bool
-        {
-            $today = new \DateTime();
-            if ($reservation_date >= $today) {
-                $this->reservation_date = $reservation_date;
-                return true;
-            } else {
-                
-                return false;
-            }
-        }
+public function setReservationDate(\DateTimeInterface $reservation_date): self
+{
+    $this->reservation_date = $reservation_date;
+
+    return $this;
+}
+
         
 
     #[ORM\Column(length: 255)]
@@ -150,6 +155,7 @@ private ?\DateTime $reservation_date = null;
     {
         return $this->reservation_date;
     }
+
 
 
     public function getIdUser(): ?string
