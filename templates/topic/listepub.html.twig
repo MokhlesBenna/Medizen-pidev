@@ -1,0 +1,36 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center">Liste des Publications</h1>
+
+    <div class="row justify-content-center">
+        {% for publication in publications %}
+            <div class="mb-4">
+                <div class="card">
+                    <div class="card-body">
+                      
+                    <!--  <p class="card-text">{{ publication.id }}</p> -->
+                        <p class="card-text">{{ publication.Contenu }}</p>
+                        <p class="card-text">Postée le : {{ publication.Datedecreation ? publication.Datedecreation|date('Y-m-d H:i:s') : '' }}</p>
+                        {% if publication.image %}
+                            <img src="{{ asset('img/' ~ publication.image) }}" alt="Image" style="max-width: 100%; max-height: 200px;">
+                        {% endif %}
+                        <div class="mt-3">
+                            
+                            <a href="{{ path('app_publication_delete', {'id': publication.id}) }}" class="btn btn-danger">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <p class="text-center">Aucune publication trouvée.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

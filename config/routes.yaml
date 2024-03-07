@@ -1,3 +1,27 @@
 #index:
 #    path: /
 #    controller: App\Controller\HomeController::index
+# routes.yaml
+
+
+
+# config/routes.yaml
+
+# Route for adding to favorites
+app_addaufavoris:
+    path: '/addaufavoris/{id}'
+    controller: 'App\Controller\TopicController::ajouteraufavoris'
+    methods: ['POST'] # Adjust the HTTP methods as needed
+
+# Route for displaying favorites
+app_favoris:
+    path: '/favoris'
+    controller: 'App\Controller\TopicController::affichefavoris'
+    methods: ['GET'] # Adjust the HTTP methods as needed
+
+# Route for deleting from favorites
+app_deletedufavoris:
+    path: '/deletedufavoris/{id}'
+    controller: 'App\Controller\TopicController::deletedufavoris'
+    methods: ['POST'] # Adjust the HTTP methods as needed
+

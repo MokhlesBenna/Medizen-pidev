@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 use App\Entity\Topic;
+use App\Entity\like;
+use App\Entity\User;
 use App\Entity\Publication;
 use App\Form\PublicationType;
 use App\Repository\PublicationRepository;
@@ -10,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route('/publication')]
 class PublicationController extends AbstractController
@@ -19,8 +23,11 @@ class PublicationController extends AbstractController
     {
         return $this->render('publication/index.html.twig', [
             'publications' => $publicationRepository->findAll(),
+            
         ]);
     }
+
+
 
     #[Route('/new/{topicId}', name: 'app_publication_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, int $topicId): Response
@@ -29,30 +36,33 @@ class PublicationController extends AbstractController
         $publication = new Publication();
         $form = $this->createForm(PublicationType::class, $publication);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Persistez l'entité Publication après avoir traité le formulaire
+            $publication->setTopic($topic); // Assurez-vous que la publication est associée au bon topic
             $entityManager->persist($publication);
-            $publication->setTopic($topic);
             $entityManager->flush();
-    
-            return $this->redirectToRoute('app_publication_index', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('app_topic_details', ['id' => $topic->getId()]);
         }
-    
+
         return $this->renderForm('publication/new.html.twig', [
             'publication' => $publication,
             'form' => $form,
             'topic' => $topic
         ]);
     }
+
     
 
 
     #[Route('/{id}', name: 'app_publication_show', methods: ['GET'])]
-    public function show(Publication $publication): Response
-    {
+    public function show(Publication $publication, EntityManagerInterface $entityManager): Response
+    { $id_user = 1;
+        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id_user]);
+        $existingLike = $entityManager->getRepository(Like::class)->findOneBy(['user' => $user, 'id_publication' => $publication]);
         return $this->render('publication/show.html.twig', [
             'publication' => $publication,
+            'like' => $existingLike,
         ]);
     }
 
@@ -101,6 +111,8 @@ class PublicationController extends AbstractController
 
         return $this->redirectToRoute('app_publication_index');
     }
+    
+   
 
    
 }

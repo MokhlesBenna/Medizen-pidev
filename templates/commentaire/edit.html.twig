@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Commentaire{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <form action="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}" method="post">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        <div class="input-group">
+                            {{ form_widget(form.Contenu, {'attr': {'class': 'form-control', 'placeholder': 'Write a comment...'}}) }}
+                            
+            
+                            {{ form_widget(form.Datedecreation, {'attr': {'class': 'form-control'}}) }}
+                       
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

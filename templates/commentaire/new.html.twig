@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <form action="{{ path('app_commentaire_new') }}" method="post">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        <div class="input-group">
+                            {{ form_widget(form.Contenu, {'attr': {'class': 'form-control', 'placeholder': 'Write a comment...'}}) }}
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-comment"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,30 +1,80 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
+
 {% block title %}
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Votre CSS existant */
+        .topic-title {
+            color: blue;
+            font-size: 24px;
+        }
+        .card-text {
+            font-size: 17px;
+            color: black;
+        }
+        .related-publications {
+            margin-top: 20px; 
+            margin-bottom: 20px; 
+            color: blue;
+            font-size: 24px;
+        }
+        .card {
+            position: relative;
+        }
+        .card img {
+            max-width: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+        .action-buttons {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .action-buttons a {
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+    </style>
+     
+{% endblock %}
+
 {% block body %}
-	<!-- About Start -->
-	<div class="container-xxl py-5">
-		<div class="container">
-			<div class="row g-5">
-				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
-					<div class="d-flex flex-column">
-						<img class="img-fluid rounded w-75 align-self-end" src="{{ asset('img/about-1.jpg') }}" alt="">
-						<img class="img-fluid rounded w-50 bg-white pt-3 pe-3" src="{{ asset('img/about-2.jpg') }}" alt="" style="margin-top: -25%;">
-					</div>
-				</div>
-				<div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-					<h2>{{ topic.Titre }}</h2>
-                    <p>{{ topic.Contenu }}</p>
-                    <p>Date de création : {{ topic.Datedecreation|date('Y-m-d H:i:s') }}</p>
-																																																																																																																																																																						
-					<p><i class="far fa-check-circle text-primary me-3"></i>Quality health care</p>
-                    <p><i class="far fa-check-circle text-primary me-3"></i>Only Qualified Doctors</p>
-                    <p><i class="far fa-check-circle text-primary me-3"></i>Medical Research Professionals</p>
-					<a href="{{ path('app_publication_new', {'topicId': topic.id}) }}" class="btn btn-primary w-100 py-3">Créer une nouvelle publication</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- About End -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h2 class="mb-4 topic-title">{{ topic.Titre }}</h2>
+                <p class="card-text">{{ topic.Contenu }}</p>
+                <p class="card-text">Date de création : {{ topic.Datedecreation|date('Y-m-d H:i:s') }}</p>
+                <h3 class="related-publications">Publications associées :</h3>
+                {% for publication in publications %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <p class="card-text">{{ publication.Contenu }}</p>
+                            <p class="card-text">Postée le : {{ publication.Datedecreation ? publication.Datedecreation|date('Y-m-d H:i:s') : '' }}</p>
+                            {% if publication.image %}
+                                <img src="{{ asset('img/' ~ publication.image) }}" alt="Image" class="img-fluid">
+                            {% endif %}
+                            
+
+                              <div>
+                                    <a href="{{ path('app_publication_show', {'id': publication.id}) }}" class="btn btn-link"><i class="bi bi-eye"></i> details</a>
+                  
+                            </div>
+                            
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-center">Aucune publication trouvée.</p>
+                {% endfor %}
+                
+               
+                <a href="{{ path('app_publication_new', {'topicId': topic.id}) }}" class="btn btn-primary w-100 py-3 mt-4">Créer une nouvelle publication</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

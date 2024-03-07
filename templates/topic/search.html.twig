@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% for topic in topics %}
+    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="card h-100 bg-light"> 
+            <div class="card-body">
+                <div class="d-inline-flex align-items-center justify-content-center bg-white rounded-circle mb-4" style="width: 65px; height: 65px;">
+                    <i class="fa fa-heartbeat text-primary fs-4"></i>
+                </div>
+                <h4 class="card-title mb-3">{{ topic.Titre }}</h4> 
+                <p class="card-text mb-4">{{ topic.Contenu }}</p> 
+                <a href="{{ path('app_topic_details', {'id': topic.id}) }}" class="btn btn-primary">
+                    <i class="fa fa-plus me-2"></i>Read More
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}

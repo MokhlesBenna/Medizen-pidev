@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Repository\PublicationRepository;
 use Doctrine\DBAL\Types\Types;
@@ -40,6 +42,18 @@ class Publication
     #[ORM\JoinColumn(nullable: false)]
     
     private ?Topic $topic ;
+
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'publication')]
+    private Collection $commentaires;
+
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'likee')]
+    private Collection $likes;
+
+    public function __construct()
+    {
+        $this->commentaires = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -97,5 +111,65 @@ class Publication
 {
     $this->topicId = $topicId;
 }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): static
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires->add($commentaire);
+            $commentaire->setPublication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): static
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getPublication() === $this) {
+                $commentaire->setPublication(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setLikee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getLikee() === $this) {
+                $like->setLikee(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

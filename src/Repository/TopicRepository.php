@@ -45,4 +45,18 @@ class TopicRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+// TopicRepository.php
+
+// TopicRepository.php
+
+public function findAllOrderedByCreationDate()
+{
+    return $this->createQueryBuilder('t')
+        ->orderBy('t.Datedecreation', 'DESC') 
+        ->getQuery()
+        ->getResult();
+}
+
+
 }
