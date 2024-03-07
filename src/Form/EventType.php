@@ -21,7 +21,8 @@ class EventType extends AbstractType
             ->add('dateDebut', DateTimeType::class, [
                 'widget' => 'single_text',  
                 'empty_data' => $options['data']->getDateDebut(),
-               
+
+            
             ])
             ->add('dateFin', DateTimeType::class, [
                 'widget' => 'single_text',

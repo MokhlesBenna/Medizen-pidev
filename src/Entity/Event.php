@@ -85,6 +85,7 @@ class Event
     {
         $this->sponsor_list = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->dateDebut = $this->getCurrentDate();
     }
 
     public function getId(): ?int

@@ -17,20 +17,20 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
-
 #[Route('/event')]
 class EventController extends AbstractController
 {
     #[Route('/', name: 'app_event_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entity,EventRepository $eventRepository,PaginatorInterface $paginator,Security $security, Request $request): Response
     {
+       
         $user = $security->getUser();
         $event = $eventRepository->findAll();
         $pagination = $paginator->paginate(
 
             $event,
             $request->query->getInt('page', 1), // Current page
-            2   // Items per page
+            4   // Items per page
         );
         return $this->render('event/index.html.twig', [
             'events' => $pagination,
@@ -38,12 +38,24 @@ class EventController extends AbstractController
     }
 
     #[Route('/all', name: 'app_event_indexx', methods: ['GET'])]
-    public function indexx(EventRepository $eventRepository): Response
-    {
-        return $this->render('event/eventshow.html.twig', [
-            'events' => $eventRepository->findAll(),
-        ]);
-    }
+public function indexx(EventRepository $eventRepository, PaginatorInterface $paginator, Request $request): Response
+{
+    // Récupérer tous les événements depuis le repository
+    $events = $eventRepository->findAll();
+
+    // Paginer les résultats
+    $pagination = $paginator->paginate(
+        $events,
+        $request->query->getInt('page', 1), // Page actuelle
+        4   // Éléments par page
+    );
+
+    // Rendre la vue avec les événements paginés
+    return $this->render('event/eventshow.html.twig', [
+        'events' => $pagination,
+    ]);
+}
+
 
     #[Route('/a', name: 'app_event_detail', methods: ['GET'])]
     public function indexxsh(EventRepository $eventRepository): Response
@@ -62,48 +74,45 @@ class EventController extends AbstractController
     }
 
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,SluggerInterface $slugger ): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $image = $form->get('image')->getData();
-
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
-            if ($image) {
-                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $image->move(
-                        $this->getParameter('event_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                // instead of its contents
-                $event->setImage($newFilename);
+            // Vérifier si l'événement existe déjà
+            $existingEvent = $this->getDoctrine()->getRepository(Event::class)->findOneBy([
+                'titre' => $event->gettitre(),
+                'lieu' => $event->getlieu(),
+                // Ajouter d'autres critères si nécessaire
+            ]);
+    
+            if ($existingEvent) {
+                // Ajouter un message flash pour informer que l'événement existe déjà
+                $this->addFlash('error_' . $event->getId(), 'Cet événement existe déjà.');
+            } else {
+                // Traitement du téléchargement de l'image
+                $image = $form->get('image')->getData();
+                $this->handleImageUpload($image, $event, $slugger);
+    
+                // Persist et flush uniquement si l'événement n'existe pas déjà
+                $entityManager->persist($event);
+                $entityManager->flush();
+    
+                // Ajouter un message flash pour informer du succès de l'ajout
+                $this->addFlash('success_' . $event->getId(), 'Événement ajouté avec succès.');
+                
+                return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
             }
-            $entityManager->persist($event);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->renderForm('event/new.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
     }
+    
 
     #[Route('/admin/event/{id}/details', name: 'event_details_admin', methods: ['GET'], requirements: ['id' => '\d+'])]
 public function eventDetails(int $id, EventRepository $eventRepository): Response
@@ -158,7 +167,7 @@ public function eventDetails(int $id, EventRepository $eventRepository): Respons
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
+        
             return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -186,5 +195,29 @@ public function deleteevent(int $id, EventRepository $eventRepository, EntityMan
 
     return $this->redirectToRoute('app_event_index');
 }
+// EventController.php
 
+public function deleteExpiredEvents(EventRepository $eventRepository, EntityManagerInterface $entityManager): Response
+{
+    $expiredEvents = $eventRepository->findExpiredEvents();
+
+    foreach ($expiredEvents as $event) {
+        $entityManager->remove($event);
+    }
+
+    $entityManager->flush();
+
+    return new Response('Expired events deleted successfully');
+}
+
+#[Route(name: 'OrderBydateDebut')]
+public function orderByDateDebut(EventRepository $repo)
+{
+    $eventsOrderedBydateDebut = $repo->findBydateDebutOrdered();
+
+    return $this->render('event/index.html.twig', [
+        'event' => $eventsOrderedBydateDebut,
+    ]);
+
+}
 }

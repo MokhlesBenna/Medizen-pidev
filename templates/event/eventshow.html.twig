@@ -15,7 +15,7 @@
 						<div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
 							<div class="team-item position-relative rounded overflow-hidden">
 								<div class="overflow-hidden">
-									<img src="{{ asset('uploads/events/' ~ event.image) }}"  alt="Event Image"  >
+									<img src="{{ asset('uploads/events/' ~ event.image) }}" alt="Event Image">
 								</div>
 
 								<div class="team-text bg-light text-center p-4">
@@ -40,5 +40,53 @@
 				{% endfor %}
 			</div>
 		</body>
+		{# Pagination #}
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="text-center">
+					{{ knp_pagination_render(events) }}
+				</div>
+			</div>
+		</div>
+		<br>
+
+		{# style of pagination #}
+		<style>
+			.pagination {
+				display: flex;
+				justify-content: center;
+				list-style: none;
+				padding: 0;
+			}
+
+			.pagination li {
+				margin: 0 5px;
+			}
+
+			.button-container {
+				display: flex;
+				flex-direction: row;
+				overflow-x: auto;
+				white-space: nowrap;
+			}
+
+
+			.button-container button {
+				margin-right: 10px; /* Espacement entre les boutons */
+			}
+
+			.pagination a {
+				text-decoration: none;
+				padding: 5px 10px;
+				border: 1px solid #404a3d; /* Bleu */
+				border-radius: 3px;
+				color: #404a3d; /* Bleu */
+			}
+
+			.pagination a:hover {
+				background-color: #404a3d; /* Bleu au survol */
+				color: #fff; /* Texte blanc au survol */
+			}
+		</style>
 	</body>
 </div></body>{% endblock %}

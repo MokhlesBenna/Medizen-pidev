@@ -8,8 +8,23 @@
 	<h1 class="text-center">sponseur index</h1>
 	<div class="row justify-content-center">
 		<div class="col-lg-12">
+			<div class="card-body">
+				<h5 class="card-title"></h5>
+				<div class="row">
+					<div class="col">
+						<input type="text" value="" class="form-control" placeholder="Recherche de Nom" id="searchNom">
+					</div>
+					<div class="col">
+						<input type="text" value="" class="form-control" placeholder="Recherche d'email" id="searchemail">
+					</div>
 
-			<table class="table table-borderless datatable">
+					<div class="col">
+						<input type="text" value="" class="form-control" placeholder="Recherche de pack" id="searchpack">
+					</div>
+				</div>
+			</div>
+
+			<table class="table table-borderless" id="dataTable">
 				<thead>
 					<tr>
 						<th scope="col">Id</th>
@@ -59,4 +74,31 @@
 			Ajouter
 		</a>
 	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<script>
+		$(document).ready(function () { // Function to perform the search based on the specified column
+function searchColumn(columnIndex, value) {
+$("#dataTable tbody tr").filter(function () {
+var cellText = $(this).find("td").eq(columnIndex).text().toLowerCase();
+var found = cellText.indexOf(value) > -1;
+$(this).toggle(found);
+});
+}
+
+// Event handlers for each input element
+$("#searchNom").on("keyup", function () {
+searchColumn(1, $(this).val().toLowerCase());
+});
+
+$("#searchemail").on("keyup", function () {
+searchColumn(2, $(this).val().toLowerCase());
+});
+
+
+$("#searchpack").on("keyup", function () {
+searchColumn(5, $(this).val().toLowerCase());
+});
+});
+	</script>
 {% endblock %}

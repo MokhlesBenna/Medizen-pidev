@@ -45,4 +45,13 @@ class EventRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function OrderBydateDebut()
+    {
+        $em = $this->getEntityManager();
+
+        return $em->createQuery('SELECT e FROM App\Entity\Event e ORDER BY e.dateDebut ASC')
+            ->getResult();
+    }
+    
+
 }

@@ -1,14 +1,33 @@
+{# templates/event/new.html.twig #}
+
 {% extends 'baseback.html.twig' %}
 
-{% block title %}New Event{% endblock %}
+{% block title %}New Event
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Event</h1>
-    <div class="card">
-        <div class="card-body">
-            {{ include('event/_form.html.twig') }}
-            <a href="{{ path('app_event_index') }}" class="btn btn-primary">
-		<i class="fas fa-plus-circle"></i>Ajouter</a>
-        </div>
-    </div>
+	<h1>Create new Event</h1>
+	<div class="card">
+		<div
+			class="card-body">
+			{# Ajoutez ce bloc pour afficher les messages flash de succès spécifiques à l'événement #}
+			{% for flashMessage in app.flashes('success_' ~ event.id) %}
+				<div class="alert alert-success">
+					{{ flashMessage }}
+				</div>
+			{% endfor %}
+
+			{# Ajoutez ce bloc pour afficher les messages flash d'erreur spécifiques à l'événement #}
+			{% for flashMessage in app.flashes('error_' ~ event.id) %}
+				<div class="alert alert-danger">
+					{{ flashMessage }}
+				</div>
+			{% endfor %}
+
+			{{ include('event/_form.html.twig') }}
+			<a href="{{ path('app_event_index') }}" class="btn btn-primary">
+				<i class="fas fa-plus-circle"></i>Ajouter
+			</a>
+		</div>
+	</div>
 {% endblock %}

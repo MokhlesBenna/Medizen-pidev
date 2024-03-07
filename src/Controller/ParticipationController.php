@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use DateTime;
 use App\Service\SendMailService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,39 +21,37 @@ class ParticipationController extends AbstractController
         ]);
     }
     #[Route('/participer/{id}', name: 'participer_event', methods: ['POST'])]
-    public function participer(int $id,UserRepository $userRepository,SendMailService $mail): Response
+    public function participer(int $id, UserRepository $userRepository, SendMailService $mail): Response
     {
-        // Récupérez l'utilisateur connecté
-        
-        $userid = 1; // à remplacer par id salim session
-        $user= $userRepository->findByUserId($userid);
-
-        // Récupérez l'événement
+        $userId = 1; // à remplacer par id salim session
+        $user = $userRepository->findByUserId($userId);
         $event = $this->getDoctrine()->getRepository(Event::class)->find($id);
+        $currentDateTime = new DateTime();
 
-        // Ajoutez l'utilisateur à la liste des participants de l'événement
-        foreach ($user as $user) {
-            $event->addUser($user);
-          }
+        if ($currentDateTime >= $event->getDateDebut()) {
+            // L'événement a déjà commencé, renvoie une réponse JSON avec un indicateur d'erreur
+            return new JsonResponse(['success' => false, 'error' => 'Cet événement a déjà commencé. Vous ne pouvez pas participer.']);
+        } else {
+            foreach ($user as $user) {
+                $event->addUser($user);
+            }
 
-        // Enregistrez les modifications en base de données
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($event);
-        $entityManager->flush();
-        $mail->send(
-            'espritagri11@gmail.com',
-            $user->getEmail(),
-            'Confirmation de participation',
-            'event',
-            ['event'=> 'event']
-          );
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($event);
+            $entityManager->flush();
+            $mail->send(
+                'espritagri11@gmail.com',
+                $user->getEmail(),
+                'Confirmation de participation',
+                'event',
+                ['event'=> 'event']
+            );
 
-        // Ajoutez un message flash pour la notification
-        $this->addFlash('success', 'Vous avez participé à l\'événement avec succès!');
-
-        // Redirigez l'utilisateur vers la même page ou une autre page si nécessaire
-        return $this->redirectToRoute('app_event_indexx');
-
-        
+            // Renvoie une réponse JSON avec un indicateur de succès
+            return new JsonResponse(['success' => true]);
+        }
     }
+
+    
+
 }
