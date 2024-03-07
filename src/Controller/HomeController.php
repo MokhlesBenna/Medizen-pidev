@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use League\OAuth2\Client\Provider\Facebook;
+use League\OAuth2\Client\Provider\Google;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -28,19 +31,35 @@ class HomeController extends AbstractController
 
 
     #[Route('/', name: 'app_index_front')]
-    public function index(): Response
+    public function index(UserRepository $userRepo): Response
     {
+        $user = $this->getUser();
+        //dd($userRepo->find($user)->isBlocked());
+        
+        
         
         //dd($this->getUser()->getRoles()[0]);
-        if ($this->getUser()->getRoles()[0]=="ROLE_USER")
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
-        else if ($this->getUser()->getRoles()[0]=="ROLE_ADMIN"){
-            return $this->render('home/index_admin.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+        if ($user){
+            $isBlocked = $userRepo->find($user)->isBlocked();
+            if ($user->getRoles()[0]=="ROLE_USER")
+                if ($isBlocked)
+                    return $this->redirectToRoute('app_login');
+                else
+                    return $this->render('home/index.html.twig', [
+                ]);
+            else if ($user->getRoles()[0]=="ROLE_ADMIN"){
+                if ($isBlocked)
+                    return $this->render('security/login.html.twig', ['isBlocked'=>$isBlocked]);
+                else
+                return $this->render('home/index_admin.html.twig', [
+                ]);
+            }
         }
+        else
+        return $this->render('base.html.twig', [
+                ]);
+
+
     }
      #[Route('/admin', name: 'app_index_admin')]
     public function index_admin(): Response
@@ -107,10 +126,9 @@ class HomeController extends AbstractController
            {
                 $new_user=new User();
 
-                $new_user->setNom($nom)
+                $new_user->setUsername($nom)
                       ->setEmail($email)
-                      ->setPassword(sha1(str_shuffle('abscdop123390hHHH;:::OOOI')))
-                      ->setPictureUrl($picture);
+                      ->setPassword(sha1(str_shuffle('abscdop123390hHHH;:::OOOI')));
               
                 $manager->persist($new_user);
 
@@ -135,7 +153,6 @@ class HomeController extends AbstractController
 
     }
 
-
      #[Route('/user', name: 'app_user_admin', methods: ['GET'])]
      public function indexadmin(UserRepository $UserRepository): Response
     {
@@ -143,4 +160,24 @@ class HomeController extends AbstractController
             'users' => $UserRepository->findAll(),
         ]);
     }
+
+    #[Route('/user/{id}', name: 'app_ban_user', methods: ['GET'])]
+    public function banUser(User $user,EntityManagerInterface $entitymanager): Response
+    {
+        //dd($user);
+        $user->setBlocked(1);
+        $entitymanager->persist($user);
+        $entitymanager->flush();
+        return $this->redirectToRoute('app_user_admin', [], Response::HTTP_SEE_OTHER);
+
+    }
+    // #[Route('/user/{id}', name: 'app_bann')]
+    // public function changeUserRole($id, EntityManager  $entityManager){
+    //     $em = $this->manager;
+    //     $user = $this->repo->find($id);
+    //     $user->setRoles(['ROLE_BANNED']);
+    //     $em->persist($user);
+    //     $em->flush();
+    //     return $this->redirectToRoute('app_listusers');
+    // }
 }

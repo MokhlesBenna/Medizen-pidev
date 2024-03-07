@@ -32,6 +32,8 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setRoles(['ROLE_USER']);
+            $user->setBlocked(0);
+
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -61,6 +63,7 @@ class RegistrationController extends AbstractController
                 )
             );
             $user->setRoles(['ROLE_ADMIN']);
+            $user->setBlocked(0);
 
             $entityManager->persist($user);
             $entityManager->flush();

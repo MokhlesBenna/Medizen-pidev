@@ -50,6 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'numero telephone non valide',
     )]
     private ?string $telephone = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $blocked = null;
     
 
     public function getId(): ?int
@@ -192,6 +195,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelephone(?string $telephone): static
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function isBlocked(): ?bool
+    {
+        return $this->blocked;
+    }
+
+    public function setBlocked(?bool $blocked): static
+    {
+        $this->blocked = $blocked;
 
         return $this;
     }
