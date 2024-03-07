@@ -16,10 +16,35 @@ use Symfony\Component\Routing\Annotation\Route;
 class EtablissementController extends AbstractController
 {
     #[Route('/', name: 'app_etablissement_index', methods: ['GET'])]
-    public function index(EtablissementRepository $etablissementRepository): Response
+    public function index(EtablissementRepository $etablissementRepository,Request $request): Response
     {
+        $tasks = $etablissementRepository->findAll();
+        //search
+        $searchQuery = $request->query->get('search');
+
+           // Si une recherche par name est effectuée, filtrer les etablissements en conséquence
+           if ($searchQuery) {
+            $tasks = $etablissementRepository->findByName($searchQuery);}
+            
+        
+
         return $this->render('etablissement/index.html.twig', [
-            'etablissements' => $etablissementRepository->findAll(),
+            'etablissements' => $tasks
+        ]);
+    }
+
+    #[Route('/statistique', name: 'app_etablissement_stat', methods: ['GET'])]
+    public function indexStat(EtablissementRepository $etablissementRepository): Response
+    {
+        $tasks = $etablissementRepository->findAll();
+        $counts = $etablissementRepository->countEstablishmentsWithSameLocation();
+        
+        $labels = array_keys($counts);
+        $dataYes = array_values($counts);
+        return $this->render('etablissement/stat.html.twig', [
+            'etablissements' => $tasks,
+            'labels' => json_encode($labels),  // Convert PHP array to JSON for use in JavaScript
+            'dataYes' => json_encode($dataYes)
         ]);
     }
 
@@ -90,4 +115,17 @@ class EtablissementController extends AbstractController
 
         return $this->redirectToRoute('app_etablissement_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/etablissement/map', name: 'show_map')]
+    public function showEtablissementMap(): Response
+    {
+        // Retrieve offer data from the database, including latitude and longitude
+        $etablissements = $this->getDoctrine()->getRepository(Etablissement::class)->findAll();
+
+        return $this->render('etablissement/map.html.twig', [
+            'etablissements' => $etablissements,
+        ]);
+    }
+
+
 }

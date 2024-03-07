@@ -126,6 +126,7 @@ class Departement
         $this->etablissement = $etablissement;
 
         return $this;
+        
     }
     public function __toString(){
         return $this->Nom;

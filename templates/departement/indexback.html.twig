@@ -7,8 +7,7 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Datatables</h5>
-              <p>Add lightweight datatables to your project with using the <a href="https://github.com/fiduswriter/Simple-DataTables" target="_blank">Simple DataTables</a> library. Just add <code>.datatable</code> class name to any table you wish to conver to a datatable</p>
+              <h5 class="card-title">Table des departements</h5>
 
               <!-- Table with stripped rows -->
               <table class="table datatable">
@@ -35,7 +34,8 @@
                     <td> 
                      <a class="btn btn-info rounded-pill" href="{{ path('app_departement_delete', {'id': departement.id}) }}">Show</a>
                      <a class="btn btn-info rounded-pill" href="{{ path('app_departement_edit', {'id': departement.id}) }}">Edit</a>
-                     {{ include('departement/_delete_form.html.twig') }}
+                     <a class="btn btn-info rounded-pill" href="{{ path('app_departement_delete', {'id': departement.id}) }}">Delete</a>
+                     
                      
                      </td>
                   </tr>

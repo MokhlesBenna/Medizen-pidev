@@ -64,6 +64,36 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.longitude) }}      
+                    </p>        
+                    {{ form_widget(form.longitude ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.longitude) is not empty  %}
+                        {% for error in form.longitude.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating">
+                    <p style=" color: black;">
+                        {{ form_label(form.latitude) }}      
+                    </p>        
+                    {{ form_widget(form.latitude ,  {'attr': {'class': 'form-control border-2'}}) }} 
+                    
+
+                    {% if form_errors(form.latitude) is not empty  %}
+                        {% for error in form.latitude.vars['errors'] %}
+                            <p class="text-danger">{{ error.message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
 
             
 

@@ -16,6 +16,8 @@ class EtablissementType extends AbstractType
             ->add('type')
             ->add('location')
             ->add('description')
+            ->add('latitude')
+            ->add('longitude')
         ;
     }
 

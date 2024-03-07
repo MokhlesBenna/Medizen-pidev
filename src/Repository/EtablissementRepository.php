@@ -21,6 +21,32 @@ class EtablissementRepository extends ServiceEntityRepository
         parent::__construct($registry, Etablissement::class);
     }
 
+    public function countEstablishmentsWithSameLocation(): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('e.location, COUNT(e.id) as count')
+            ->groupBy('e.location');
+
+        $results = $qb->getQuery()->getResult();
+
+        $counts = [];
+        foreach ($results as $result) {
+            $counts[$result['location']] = $result['count'];
+        }
+
+        return $counts;
+    }
+    public function findByName(string $name)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+            
+    }
+
+    
 //    /**
 //     * @return Etablissement[] Returns an array of Etablissement objects
 //     */
