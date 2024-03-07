@@ -112,7 +112,28 @@ public function indexx(EventRepository $eventRepository, PaginatorInterface $pag
             'form' => $form,
         ]);
     }
-    
+    private function handleImageUpload($image, Event $event, SluggerInterface $slugger)
+    {
+        if ($image) {
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
+
+            // Move the file to the directory where your images are stored
+            try {
+                $image->move(
+                    $this->getParameter('event_directory'), // defined in services.yaml or config/services.yaml
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // Handle the exception if something goes wrong during file upload
+                throw new FileException('Error uploading the image');
+            }
+
+            // Update the 'image' property of the Event entity
+            $event->setImage($newFilename);
+        }
+    }
 
     #[Route('/admin/event/{id}/details', name: 'event_details_admin', methods: ['GET'], requirements: ['id' => '\d+'])]
 public function eventDetails(int $id, EventRepository $eventRepository): Response
