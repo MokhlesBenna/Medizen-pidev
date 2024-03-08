@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Departement{% endblock %}
+
+{% block body %}
+    <h1>Create new Departement</h1>
+    <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Create New Department</h5>
+
+    {{ include('departement/_form.html.twig') }}
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+     <a class="btn btn-info rounded-pill" href="{{ path('app_departement_index', {'id': departement.id}) }}">Back to list</a>
+{% endblock %}

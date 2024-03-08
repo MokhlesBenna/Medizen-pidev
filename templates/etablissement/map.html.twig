@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Map Etablissement{% endblock %}
+{% block styles %}
+<style>
+    .custom-btn {
+        padding: 0.25rem 0.5rem;
+        background-color: transparent;
+        border: 1px solid transparent;
+        color: black;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: yellow;
+    }
+</style>
+{% endblock %}
+{% block body %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; width: 900px;margin: 0 auto;  }
+    </style>
+
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([0, 0], 2); // Set initial map view
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        {% for etablissement in etablissements %}
+            L.marker([{{ etablissement.latitude }}, {{ etablissement.longitude }}]).addTo(map)
+                .bindPopup(`<b>{{ etablissement.name }}</b><br> {{ etablissement.type }}</b>`);
+        {% endfor %}
+    </script>
+{% endblock %}

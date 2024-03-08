@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Departement{% endblock %}
+
+{% block body %}
+    <h1>Departement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ departement.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ departement.Nom }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ departement.description }}</td>
+            </tr>
+            <tr>
+                <th>Chef_departement</th>
+                <td>{{ departement.chefDepartement }}</td>
+            </tr>
+            <tr>
+                <th>Services_offerts</th>
+                <td>{{ departement.servicesOfferts }}</td>
+            </tr>
+            <tr>
+                <th>Localisation</th>
+                <td>{{ departement.localisation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+   
+
+    <a class="btn btn-info rounded-pill" href="{{ path('app_departement_index', {'id': departement.id}) }}">Back to list</a>
+
+    <a class="btn btn-info rounded-pill" href="{{ path('app_departement_edit', {'id': departement.id}) }}">Edit</a>
+
+    <a class="btn btn-info rounded-pill" href="{{ path('app_departement_delete', {'id': departement.id}) }}">Delete</a>
+
+    
+
+    
+{% endblock %}
