@@ -20,7 +20,7 @@ class SMSController extends AbstractController
             // Your Account SID and Auth Token from twilio.com/console
             // To set up environmental variables, see http://twil.io/secure
             $account_sid = 'AC2d0667e7b2c66cb9e7bade3584b4a5b7';
-            $auth_token = '1626d388e5925b7f4443298f06f77464';
+            $auth_token = 'c721549e2145be390ed5fbaea374bfca';
             // In production, these should be environment variables. E.g.:
             // $auth_token = $_ENV["TWILIO_AUTH_TOKEN"]
 

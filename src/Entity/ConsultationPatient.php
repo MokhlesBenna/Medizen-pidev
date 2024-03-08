@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ConsultationPatientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: ConsultationPatientRepository::class)]
 class ConsultationPatient
@@ -23,12 +22,10 @@ class ConsultationPatient
     #[Assert\NotBlank(message: "Le prénom est requis")]
     private ?string $surname = null;
 
-    #[ORM\OneToOne(targetEntity: Reservation::class, cascade: ['persist', 'remove'])]
-    #[Assert\NotNull(message: "La date de réservation est requise")]
-    private ?DateTimeInterface $reservation_date = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column( nullable: true)]
     private ?string $RemarquesDesDocteurs = null;
+
+    
 
     public function getId(): ?int
     {
@@ -59,18 +56,6 @@ class ConsultationPatient
         return $this;
     }
 
-    public function getReservationDate(): ?DateTimeInterface
-    {
-        return $this->reservation_date;
-    }
-
-    public function setReservationDate(?DateTimeInterface $reservation_date): static
-    {
-        $this->reservation_date = $reservation_date;
-
-        return $this;
-    }
-
     public function getRemarquesDesDocteurs(): ?string
     {
         return $this->RemarquesDesDocteurs;
@@ -82,4 +67,6 @@ class ConsultationPatient
 
         return $this;
     }
-}
+
+   
+    }

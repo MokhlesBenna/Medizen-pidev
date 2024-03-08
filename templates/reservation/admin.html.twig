@@ -35,7 +35,7 @@
                             <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
                             <td style="color: {% if reservation.status == 'pending' %}orange{% elseif reservation.status == 'Accepted' %}green{% else %}red{% endif %};">{{ reservation.status }}</td>
                             <td>
-                                <a href="{{ path('app_reservation_showAdmin', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                                <a href="{{ path('app_reservation_admin', {'id': reservation.id}) }}" class="btn btn-sm btn-info">Voir</a>
                                 
                                 {% if reservation.status == 'pending' %}
                                     <form action="{{ path('reject_reservation', {'id': reservation.id}) }}" method="post" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir rejeter cette réservation?')">

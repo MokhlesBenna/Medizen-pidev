@@ -97,7 +97,7 @@ public function edit(Request $request, Reservation $reservation, EntityManagerIn
     #[Route('show/admin/{id}', name: 'app_reservation_show')]
     public function showAdmin(Reservation $reservation): Response
     {
-        return $this->render('reservation/show.html.twig', [
+        return $this->render('reservation/adminShowRes.html.twig', [
             'reservation' => $reservation,
         ]);
 }
@@ -152,7 +152,7 @@ public function new(Request $request, EntityManagerInterface $entityManager, Doc
 
             $this->addFlash('success', 'Votre rendez-vous a été réservé avec succès.');
             return $this->redirectToRoute('app_reservation_new');
-        } else {
+        } else {    
             $this->addFlash('error', 'La date de réservation doit être aujourd\'hui ou dans le futur.');
             return $this->redirectToRoute('app_reservation_new');
         }

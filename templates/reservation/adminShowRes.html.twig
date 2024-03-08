@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="mb-4">Détails de la Réservation</h1>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                       
+                    </tr>
+                    <tr>
+                        <th scope="row">Nom</th>
+                        <td>{{ reservation.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Prénom</th>
+                        <td>{{ reservation.surname }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Téléphone</th>
+                        <td>{{ reservation.mobile }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Adresse</th>
+                        <td>{{ reservation.address }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">Date de Réservation</th>
+                        <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description du Problème</th>
+                        <td>{{ reservation.problemDescription }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">status</th>
+                        <td>{{ reservation.status }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+         <div class="text-center"> 
+            <a href="{{ path('app_reservation_index') }}" class="btn btn-primary">Retourner vers la liste</a>
+        </div>
+    </div>
+{% endblock %}

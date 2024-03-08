@@ -8,17 +8,20 @@
         <div class="mb-3">
             {{ form_label(form.name) }}
             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.name) }}
         </div>
         <div class="mb-3">
             {{ form_label(form.surname) }}
             {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.surname) }}
         </div>
         <div class="mb-3">
-            
+           
         </div>
         <div class="mb-3">
             {{ form_label(form.remarquesDesDocteurs) }}
             {{ form_widget(form.remarquesDesDocteurs, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+            {{ form_errors(form.remarquesDesDocteurs) }}
         </div>
         <div class="text-center"> 
             <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>

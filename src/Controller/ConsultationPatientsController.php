@@ -41,6 +41,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager->persist($consultationPatient);
         $entityManager->flush();
+       
 
         return $this->redirectToRoute('app_consultation_patients_index', [], Response::HTTP_SEE_OTHER);
     }
